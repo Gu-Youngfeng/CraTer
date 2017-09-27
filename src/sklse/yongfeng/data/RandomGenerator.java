@@ -4,20 +4,12 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import weka.classifiers.Classifier;
-import weka.classifiers.bayes.BayesNet;
 import weka.classifiers.evaluation.Evaluation;
-import weka.classifiers.functions.LibSVM;
-import weka.classifiers.functions.SMO;
-import weka.classifiers.lazy.KStar;
 import weka.classifiers.meta.FilteredClassifier;
 import weka.classifiers.trees.J48;
-import weka.classifiers.trees.RandomForest;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSink;
 import weka.core.converters.ConverterUtils.DataSource;
-import weka.filters.supervised.instance.Resample;
 import weka.filters.supervised.instance.SMOTE;
 
 /***
@@ -99,7 +91,6 @@ public class RandomGenerator {
 		int inTrace = dataIn.numInstances();
 		int outTrace = dataOut.numInstances();
 		double ratioI = inTrace*1.0/(outTrace + inTrace);
-		double ratioII = 1 - ratioI;
 		
 		/*** expected number to select from original dataset*/
 		int intrace = (int) (num * ratioI);
