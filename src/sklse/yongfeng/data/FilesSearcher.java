@@ -13,8 +13,6 @@ public class FilesSearcher {
 	
 	public static String[] search(String directory){
 		
-		
-		
 		File file = new File(directory);
 		File[] files = file.listFiles();
 //		System.out.println("# There are following arff files under the : " + file.getAbsolutePath() + "\n");
@@ -25,7 +23,6 @@ public class FilesSearcher {
 			if(files[i].isFile() && files[i].getPath().contains(".arff")){
 //				System.out.println(files[i].getAbsolutePath());
 				lspaths.add(files[i].getAbsolutePath());
-
 			}
 		}
 		
