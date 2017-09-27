@@ -1,21 +1,21 @@
-# WekaEvaluation
-This project implements the model building and evaluation in paper "Does the Fault Reside in the Stack Trace". 
+## WekaEvaluation
+This project implements the <b>model building and evaluation</b> in paper "Does the Fault Reside in the Stack Trace". 
 
-## Environment
+### Environment
 This project is developed in Java 8.0. The additional plugins we used is <b>WEKA</b>, whose jar can be downloaded in the Maven Repository
 <a href="http://mvnrepository.com/artifact/nz.ac.waikato.cms.weka/weka-stable">[Weka Stable]</a>.
 
-## Package
+### Package
 We have two packages at present, i.e., <code>sklse.yongfeng.data</code> and <code>sklse.yongfeng.experiments</code>.
 
-<code>sklse.yongfeng.data</code> package include,
+1.<code>sklse.yongfeng.data</code> package include,
 <ul>
   <li><b>RandomGenerator.java</b> is used to randomly select/generate crashes from each project.</li>
   <li><b>InsMerge.java</b> is used to merage individual datasets into one total dataset.</li>
   <li><b>StatisticalProject.java</b> is used to provide the statistical information of each project.</li>
 </ul>
 
-<code>sklse.yongfeng.experiments</code> package include,
+2.<code>sklse.yongfeng.experiments</code> package include,
 <ul>
   <li><b>Overall.java</b> is used to conduct 10-fold cross validation on whole dataset.</li>
   <li><b>Single.java</b> is used to conduct 10-fold cross validation on each individual dataset.</li>
