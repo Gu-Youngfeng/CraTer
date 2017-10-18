@@ -12,40 +12,39 @@ public class StatisticalProject {
 	private static String[] inssName = {"Codec", "Ormlite-core", "JSqlparser", "Collections", "IO", "Jsoup", "Mango"};
 		
 	private static Instances dataCodec;
-	private static Instances dataJsi;
+	private static Instances dataOrm;
 	private static Instances dataJsql;
 	private static Instances dataCol;
 	private static Instances dataIO;
-	private static Instances dataJX;
-	private static Instances dataDBC;
+	private static Instances dataJso;
+	private static Instances dataMan;
 
 	public static void main(String[] args) throws Exception {
 
 		/** load dataset*/
 		dataCodec = DataSource.read("files\\codec500.arff");
-		dataJsi = DataSource.read("files\\ormlite500.arff"); // Jsi -> Ormlite
+		dataOrm = DataSource.read("files\\ormlite500.arff"); // Jsi -> Ormlite
 		dataJsql = DataSource.read("files\\jsqlparser500.arff");
 		dataCol = DataSource.read("files\\collections500.arff");
 		dataIO = DataSource.read("files\\io500.arff");
-		dataJX = DataSource.read("files\\jsoup500.arff");
-		dataDBC = DataSource.read("files\\mango500.arff");
+		dataJso = DataSource.read("files\\jsoup500.arff");
+		dataMan = DataSource.read("files\\mango500.arff");
 		
 		/** set class index*/
 		dataCodec.setClassIndex(dataCodec.numAttributes()-1);
-		dataJsi.setClassIndex(dataJsi.numAttributes()-1);
+		dataOrm.setClassIndex(dataOrm.numAttributes()-1);
 		dataJsql.setClassIndex(dataJsql.numAttributes()-1);
 		dataCol.setClassIndex(dataCol.numAttributes()-1);
 		dataIO.setClassIndex(dataIO.numAttributes()-1);
-		dataJX.setClassIndex(dataJX.numAttributes()-1);
-		dataDBC.setClassIndex(dataDBC.numAttributes()-1);
+		dataJso.setClassIndex(dataJso.numAttributes()-1);
+		dataMan.setClassIndex(dataMan.numAttributes()-1);
 		
-		Instances[] inss = {dataCodec, dataJsi, dataJsql, dataCol, dataIO, dataJX, dataDBC};
+		Instances[] inss = {dataCodec, dataOrm, dataJsql, dataCol, dataIO, dataJso, dataMan};
 		
-//		System.out.print("<th><td>Project</td></td># InTrace</td><td># OutTrace</td></td># Randomly Selection</td></th>");
-		System.out.println("-------  Distribution Information of 500 crashes in each Project  -------\n");
+		System.out.println("-----  Distribution Information of 500 selected crashes in each Project  -----\n");
 		
 		for(int i=0; i<inss.length; i++){
-//			System.out.print("<tr><td>" + inssName[i] + "</td>");
+
 			System.out.printf("%-15s ", inssName[i]);
 			statistic(inss[i]);
 		}
@@ -68,7 +67,7 @@ public class StatisticalProject {
 				outtrace++;
 			}
 		}
-//		System.out.println("<td>" + intrace + "</td><td>" + outtrace + "</td><td>" + len + "</td></tr>");
-		System.out.printf("inTrace:%4d, outTrace:%4d. -> randomly selection:%4d\n", intrace, outtrace, len);
+
+		System.out.printf("inTrace:%4d, outTrace:%4d.", intrace, outtrace);
 	}
 }

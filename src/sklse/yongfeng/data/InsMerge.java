@@ -6,6 +6,8 @@ import weka.core.converters.ConverterUtils.DataSource;
 
 /***
  * <p>This class <b>InsMerge</b> is used to merge each 500 crashes into a total dataset, which has 3,500 crashes.</p>
+ * <p>Function {@link#getIns(String[])} will take as input the arff path array, and output the merged arff file, 
+ * then save in the <b>files/new-total3500.arff</b> directory.</p>
  *
  */
 public class InsMerge {
