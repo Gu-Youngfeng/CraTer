@@ -1,7 +1,10 @@
 package sklse.yongfeng.experiments;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
+import sklse.yongfeng.data.FilesSearcher;
 import weka.classifiers.Classifier;
 import weka.classifiers.bayes.BayesNet;
 import weka.classifiers.evaluation.Evaluation;
@@ -17,171 +20,174 @@ import weka.filters.supervised.instance.SMOTE;
 
 /***
  * <p>Class <b>Single</b> is used to get 10-fold cross validation result of 500 crashes from each project.</p>
- * <p>We use <b>SMOTE</b> strategy combined with other classifiers( including <b>Random forest, C4.5, Bayesnet, SMO, Kstar, SVM</b> ) to train the model.</p>
+ * <p>We use <b>SMOTE</b> strategy combined with other classifiers( including <b>Random forest, C4.5, 
+ * Bayesnet, SMO, Kstar, SVM</b> ) to train the model. </p>
+ * <p>To better understand the evaluation process, we merge all function into {@link#main(String[])} function.</p>
  *
  */
 public class Single {
 	
-	private static String[] projectNames = {"Codec", "Ormlite-core", "JSqlParser", "Collections", "IO", "Jsoup", "Mango"};
+	private static double[][] results = new double[60][7];
 	
-	private static Instances dataCodec;
-	private static Instances dataJsi;
-	private static Instances dataJsql;
-	private static Instances dataCol;
-	private static Instances dataIO;
-	private static Instances dataJX;
-	private static Instances dataDBC;
+	private static String[] classifiers = {"C4.5", "RandForest", "BayesNet", "SMO", "KStar", "SVM"};
 
 	public static void main(String[] args) throws Exception {
-
-		/** load dataset*/
-		dataCodec = DataSource.read("files\\codec500.arff");
-		dataJsi = DataSource.read("files\\ormlite500.arff");  // attention jsieve -> time -> ormlite-core
-		dataJsql = DataSource.read("files\\jsqlparser500.arff");
-		dataCol = DataSource.read("files\\collections500.arff");
-		dataIO = DataSource.read("files\\io500.arff");
-		dataJX = DataSource.read("files\\jsoup500.arff"); // attention jxpath -> jsoup
-		dataDBC = DataSource.read("files\\mango500.arff"); // attention dbcp -> mango
 		
-		/** set class index*/
-		dataCodec.setClassIndex(dataCodec.numAttributes()-1);
-		dataJsi.setClassIndex(dataJsi.numAttributes()-1);
-		dataJsql.setClassIndex(dataJsql.numAttributes()-1);
-		dataCol.setClassIndex(dataCol.numAttributes()-1);
-		dataIO.setClassIndex(dataIO.numAttributes()-1);
-		dataJX.setClassIndex(dataJX.numAttributes()-1);
-		dataDBC.setClassIndex(dataDBC.numAttributes()-1);
+		/** We can simply 1 single arff to results in getEvalResult*/
+//		String[] paths = {"files/codec500.arff",
+//				"files/ormlite500.arff", "files/jsqlparser500.arff", "files/collections500.arff",
+//				"files/io500.arff", "files/jsoup500.arff", "files/mango500.arff"};
+//		for(String path: paths){
+//			getEvalResult(path);
+//		}
 		
-		/** 2. Resampling strategy*/
-//		Resample rsa1 = new Resample();
-//		Resample rsa2 = new Resample();
-//		Resample rsa3 = new Resample();
-//		Resample rsa4 = new Resample();
-//		Resample rsa5 = new Resample();
-//		Resample rsa6 = new Resample();
-//		Resample rsa7 = new Resample();
-//		
-//		rsa1.setInputFormat(dataCodec);
-//		rsa2.setInputFormat(dataJsi);
-//		rsa3.setInputFormat(dataJsql);
-//		rsa4.setInputFormat(dataCol);
-//		rsa5.setInputFormat(dataIO);
-//		rsa6.setInputFormat(dataJX);
-//		rsa7.setInputFormat(dataDBC);
-//		
-//		Resample[] rsas = {rsa1, rsa2, rsa3, rsa4, rsa5, rsa6, rsa7};
-
+		/** Or we can use 10 generated arff to get average results in getEvalResult*/
+		String[] pathsCode = FilesSearcher.search("D:/Users/LEE/Desktop/New_Data/", "codec");
+		String[] pathsORM = FilesSearcher.search("D:/Users/LEE/Desktop/New_Data/", "ormlite");
+		String[] pathsJSQ = FilesSearcher.search("D:/Users/LEE/Desktop/New_Data/", "jsqlparser");
+		String[] pathsCOL = FilesSearcher.search("D:/Users/LEE/Desktop/New_Data/", "collections");
+		String[] pathsIO = FilesSearcher.search("D:/Users/LEE/Desktop/New_Data/", "io");
+		String[] pathsJSO = FilesSearcher.search("D:/Users/LEE/Desktop/New_Data/", "jsoup");
+		String[] pathsMAN = FilesSearcher.search("D:/Users/LEE/Desktop/New_Data/", "mango");
 		
-		/** 3. SMOTE*/
-		SMOTE smote1 = new SMOTE();
-		SMOTE smote2 = new SMOTE();
-		SMOTE smote3 = new SMOTE();
-		SMOTE smote4 = new SMOTE();
-		SMOTE smote5 = new SMOTE();
-		SMOTE smote6 = new SMOTE();
-		SMOTE smote7 = new SMOTE();
+		List<String[]> dataCollection = new ArrayList<>();
+		dataCollection.add(pathsCode);
+		dataCollection.add(pathsORM);
+		dataCollection.add(pathsJSQ);
+		dataCollection.add(pathsCOL);
+		dataCollection.add(pathsIO);
+		dataCollection.add(pathsJSO);
+		dataCollection.add(pathsMAN);
 		
-		smote1.setInputFormat(dataCodec);
-		smote2.setInputFormat(dataJsi);
-		smote3.setInputFormat(dataJsql);
-		smote4.setInputFormat(dataCol);
-		smote5.setInputFormat(dataIO);
-		smote6.setInputFormat(dataJX);
-		smote7.setInputFormat(dataDBC);
 		
-		SMOTE[] smotes = {smote1, smote2, smote3, smote4, smote5, smote6, smote7};	
+		for(String[] dataset: dataCollection){
+			int index = 0;
+			for(String arffs: dataset){
+				getEvalResult(arffs, index);
+				index += 6;
+			}
+			
+			for(int j=0; j<6; j++){
+				double p0 = 0.0d, 
+					   p1 = 0.0d, 
+					   r0 = 0.0d, 
+					   r1 = 0.0d,
+					   f0 = 0.0d,
+					   f1 = 0.0d,
+					   acc = 0.0d;
+				for(int i=j; i<60; i+=6){	
+					p0 += results[i][0];
+					r0 += results[i][1];
+					f0 += results[i][2];
+					p1 += results[i][3];
+					r1 += results[i][4];
+					f1 += results[i][5];
+					acc += results[i][6];
+				}
+				System.out.printf("%-15s: %6.3f, %6.3f, %6.3f, %6.3f, %6.3f, %6.3f, %6.3f\n", 
+						classifiers[j], p0*1.0/10.0, r0*1.0/10.0, f0*1.0/10.0, p1*1.0/10.0, r1*1.0/10.0, f1*1.0/10.0, acc*1.0/10.0);
+				
+			}
+		}
+				
+	}
+	
+	/***
+	 * <p>To get 10-fold cross validation in one single arff in <b>path</b></p>
+	 * @param path arff file
+	 * @throws Exception
+	 */
+	public static void getEvalResult(String path, int index) throws Exception{
+		
+//		System.out.println(path);
+		
+		Instances ins = DataSource.read(path);
+		int numAttr = ins.numAttributes();
+		ins.setClassIndex(numAttr - 1);
+		
+		SMOTE smote = new SMOTE();
+		smote.setInputFormat(ins);
 		
 		/** classifiers setting*/
-		RandomForest rf = new RandomForest();
-//		rf.setNumIterations(200);
-		
-		BayesNet bn = new BayesNet();
-		
-		SMO smo = new SMO();
-		
-		KStar ks = new KStar();
-		
+		RandomForest rf = new RandomForest();		
+		BayesNet bn = new BayesNet();	
+		SMO smo = new SMO();	
+		KStar ks = new KStar();	
 		LibSVM svm = new LibSVM();
-		
 		J48 j48 = new J48();
 		
-		//IBk ibk = new IBk();
-		
 		FilteredClassifier fc = new FilteredClassifier();
+
+		Classifier[] cfs = {j48, rf, bn, smo, ks, svm};	
 		
-		Instances[] ins = {dataCodec, dataJsi, dataJsql, dataCol, dataIO, dataJX, dataDBC};
-//		Instances[] ins = {dataDBC};
-		Classifier[] cfs = {rf, j48, bn, smo, ks, svm};	
-//		Classifier[] cfs = {rf, j48};
-		
-		/**for each projects in ins[], we evaluate it using classifiers in cfs[]*/
-		for(int j=0;j<ins.length;j++){
+		/**No Format*/
+		for(int i=0;i<cfs.length;i++){
 			
-			/**Latex format*/
-//			System.out.print("\\hline\\hline\n\\multirow{5}{*}{\\rotatebox{-90}{" + projectNames[j] + "$^{\\ddag}$}} ");
-//			for(int i=0;i<cfs.length;i++){
-//				
-////			cfs[i].buildClassifier(ins[j]);
-//				fc.setClassifier(cfs[i]);
-//				fc.setFilter(smotes[j]);
-//				
-//				String clfName = cfs[i].getClass().getSimpleName();
-//				
-//				Evaluation eval = new Evaluation(ins[j]);
-//				
-//				eval.crossValidateModel(fc, ins[j], 10, new Random(1));
-//				
-//				// print in LaTex format
-//				System.out.print("& " + clfName);
-//				System.out.printf(" & %4.3f & %4.3f & %4.3f", eval.precision(0), eval.recall(0), eval.fMeasure(0));
-//				System.out.printf(" & %4.3f & %4.3f & %4.3f", eval.precision(1), eval.recall(1), eval.fMeasure(1));
-//				System.out.printf(" & %4.3f \\\\\n", (1-eval.errorRate()));
-//			}
-//			System.out.println("");
+			/** fc is the FilteredClassifier*/
+			fc.setClassifier(cfs[i]);
+			fc.setFilter(smote);
 			
-			/**HTML format*/
-//			System.out.print("<tr><td rowspan='7'>" + projectNames[j] + "</td>");
-//			for(int i=0;i<cfs.length;i++){
-//				
-////			cfs[i].buildClassifier(ins[j]);
-//				fc.setClassifier(cfs[i]);
-//				fc.setFilter(smotes[j]);
-//				
-//				String clfName = cfs[i].getClass().getSimpleName();
-//				
-//				Evaluation eval = new Evaluation(ins[j]);
-//				
-//				eval.crossValidateModel(fc, ins[j], 10, new Random(1));
-//
-//				System.out.print("<tr><td>" + clfName);
-//				System.out.printf("</td><td>%4.3f</td><td>%4.3f</td><td>%4.3f",eval.precision(0), eval.recall(0), eval.fMeasure(0));
-//				System.out.printf("</td><td>%4.3f</td><td>%4.3f</td><td>%4.3f",eval.precision(1), eval.recall(1), eval.fMeasure(1));
-//				System.out.printf("</td><td>%4.3f</td></tr>\n", (1-eval.errorRate()));
-//			}
+//			String clfName = cfs[i].getClass().getSimpleName();
 			
-			/**None format*/
-			System.out.println(projectNames[j]);
-			for(int i=0;i<cfs.length;i++){
-				
-				/** fc is the FilteredClassifier*/
-				//cfs[i].buildClassifier(ins[j]);
-				fc.setClassifier(cfs[i]);
-				fc.setFilter(smotes[j]);
-				
-				String clfName = cfs[i].getClass().getSimpleName();
-				
-				Evaluation eval = new Evaluation(ins[j]);
-				
-				eval.crossValidateModel(fc, ins[j], 10, new Random(1));
-				
-				System.out.printf("%-15s: ", clfName);
-				System.out.printf(" & %4.3f & %4.3f & %4.3f", eval.precision(0), eval.recall(0), eval.fMeasure(0));
-				System.out.printf(" & %4.3f & %4.3f & %4.3f", eval.precision(1), eval.recall(1), eval.fMeasure(1));
-				System.out.printf(" & %4.3f \\\\\\hline\n\n", (1-eval.errorRate()));
-			}
-			System.out.println("---------- ---------- ---------- ---------- ---------- ");
+			Evaluation eval = new Evaluation(ins);
+			
+			eval.crossValidateModel(fc, ins, 10, new Random(1));
+			
+//			System.out.printf("%-15s: ", clfName);
+//			System.out.printf(" %4.3f %4.3f %4.3f", eval.precision(0), eval.recall(0), eval.fMeasure(0));
+//			System.out.printf(" %4.3f %4.3f %4.3f", eval.precision(1), eval.recall(1), eval.fMeasure(1));
+//			System.out.printf(" %4.3f \n\n", (1-eval.errorRate()));
+			results[index + i][0] = eval.precision(0);
+			results[index + i][1] = eval.recall(0);
+			results[index + i][2] = eval.fMeasure(0);
+			results[index + i][3] = eval.precision(1);
+			results[index + i][4] = eval.recall(1);
+			results[index + i][5] = eval.fMeasure(1);
+			results[index + i][6] = 1-eval.errorRate();
 			
 		}
+		
+		/**HTML Format*/
+//	    System.out.print("<tr><td rowspan='7'>" + projectNames[0] + "</td>");
+//		for(int i=0;i<cfs.length;i++){
+//			
+//		cfs[i].buildClassifier(ins);
+//			fc.setClassifier(cfs[i]);
+//			fc.setFilter(smote);
+//			
+//			String clfName = cfs[i].getClass().getSimpleName();
+//			
+//			Evaluation eval = new Evaluation(ins);
+//			
+//			eval.crossValidateModel(fc, ins, 10, new Random(1));
+//	
+//			System.out.print("<tr><td>" + clfName);
+//			System.out.printf("</td><td>%4.3f</td><td>%4.3f</td><td>%4.3f",eval.precision(0), eval.recall(0), eval.fMeasure(0));
+//			System.out.printf("</td><td>%4.3f</td><td>%4.3f</td><td>%4.3f",eval.precision(1), eval.recall(1), eval.fMeasure(1));
+//			System.out.printf("</td><td>%4.3f</td></tr>\n", (1-eval.errorRate()));
+//		}
+		
+		/**Latex format*/
+//		System.out.print("\\hline\\hline\n\\multirow{5}{*}{\\rotatebox{-90}{" + projectNames[0] + "$^{\\ddag}$}} ");
+//		for(int i=0;i<cfs.length;i++){
+//			
+//		cfs[i].buildClassifier(ins);
+//			fc.setClassifier(cfs[i]);
+//			fc.setFilter(smote);
+//			
+//			String clfName = cfs[i].getClass().getSimpleName();
+//			
+//			Evaluation eval = new Evaluation(ins);
+//			
+//			eval.crossValidateModel(fc, ins, 10, new Random(1));
+//			
+//			// print in LaTex format
+//			System.out.print("& " + clfName);
+//			System.out.printf(" & %4.3f & %4.3f & %4.3f", eval.precision(0), eval.recall(0), eval.fMeasure(0));
+//			System.out.printf(" & %4.3f & %4.3f & %4.3f", eval.precision(1), eval.recall(1), eval.fMeasure(1));
+//			System.out.printf(" & %4.3f \\\\\n", (1-eval.errorRate()));
+//		}
+//		System.out.println("");
 		
 	}
 
