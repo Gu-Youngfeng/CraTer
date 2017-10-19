@@ -3,6 +3,7 @@ package sklse.yongfeng.experiments;
 
 import java.util.Random;
 
+import sklse.yongfeng.data.FilesSearcher;
 import weka.attributeSelection.ChiSquaredAttributeEval;
 //import weka.attributeSelection.CorrelationAttributeEval;
 //import weka.attributeSelection.InfoGainAttributeEval;
@@ -26,28 +27,31 @@ class FoldResults {
 	
 	public static void main(String[] args) throws Exception {
 		
-		String[] ARFFs = {"files\\codec500.arff",
+		String[] ARFFs = {
+				"files\\codec500.arff",
 				"files\\ormlite500.arff",
 				"files\\jsqlparser500.arff",
 				"files\\collections500.arff",
 				"files\\io500.arff",
 				"files\\jsoup500.arff",
-				"files\\mango500.arff"};
+				"files\\mango500.arff"
+				};
+//		String[] ARFFs = FilesSearcher.search("D:\\Users\\LEE\\Desktop\\New_Data");
 //		
 		/**10-fold cross validation*/
-		System.out.println("----------  70 results without Feature Selection  ----------");
-		for(int i=0; i<ARFFs.length; i++){
-			
-			showFolds(ARFFs[i]); // without feature selection		
-			
-		}
+//		System.out.println("----------  70 results without Feature Selection  ----------");
+//		for(int i=0; i<ARFFs.length; i++){
+//			for(int k=0; k<10; k++){ // for each project, we conduct 10-fold cross validation for 10 times
+//				showFolds(ARFFs[i], k); // without feature selection		
+//			}
+//		}
 		
-		System.out.println("\n----------  70 results with Feature Selection  ----------");
+//		System.out.println("\n----------  70 results with Feature Selection  ----------");
 		/**10-fold cross validation*/
 		for(int i=0; i<ARFFs.length; i++){
-			
-			showFolds(ARFFs[i], 0); // with feature selection
-			
+			for(int k=0; k<10; k++){ // for each project, we conduct 10-fold cross validation for 10 times
+				showFolds(ARFFs[i], k, 1); // with feature selection		
+			}
 		}
 
 	}
@@ -57,7 +61,7 @@ class FoldResults {
 	 * @param path project path
 	 * @throws Exception 
 	 */
-	public static void showFolds(String path) throws Exception{
+	public static void showFolds(String path, int k) throws Exception{
 		
 		Instances data1 = DataSource.read(path);
 		data1.setClassIndex(data1.numAttributes()-1);
@@ -65,7 +69,7 @@ class FoldResults {
 			return;
 
 		/** Randomize and stratify the dataset*/
-		data1.randomize(new Random(1)); 	
+		data1.randomize(new Random(k)); 	
 		data1.stratify(10);	// 10 folds
 		
 		double[][] matrix = new double[10][7];	
@@ -76,9 +80,9 @@ class FoldResults {
 			Instances train = data1.trainCV(10, i);
 			
 			/** SMOTE */
-			SMOTE smote = new SMOTE();
-			smote.setInputFormat(train);
-			train = Filter.useFilter(train, smote);
+//			SMOTE smote = new SMOTE();
+//			smote.setInputFormat(train);
+//			train = Filter.useFilter(train, smote);
 
 			/** C4.5 */
 			J48 rf = new J48();
@@ -119,7 +123,7 @@ class FoldResults {
 	 * @param sel label means we use the Feature Selection method
 	 * @throws Exception 
 	 */
-	public static void showFolds(String path, int sel) throws Exception{
+	public static void showFolds(String path, int k, int flag) throws Exception{
 			
 		Instances data1 = DataSource.read(path);
 		data1.setClassIndex(data1.numAttributes()-1);
@@ -127,13 +131,13 @@ class FoldResults {
 			return;
 		
 		/** Feature Selection: Chi-square */
-		ChiSquaredAttributeEval evall = new ChiSquaredAttributeEval();	// here we can replace the Chi-square with Correlation, Information Gain, or other validation methods
-		Ranker ranker = new Ranker();
-		AttributeSelection selector = new AttributeSelection();		
-		selector.setEvaluator(evall);
-		selector.setSearch(ranker);
-		selector.setInputFormat(data1);
-		data1 = Filter.useFilter(data1, selector);
+//		ChiSquaredAttributeEval evall = new ChiSquaredAttributeEval();	// here we can replace the Chi-square with Correlation, Information Gain, or other validation methods
+//		Ranker ranker = new Ranker();
+//		AttributeSelection selector = new AttributeSelection();		
+//		selector.setEvaluator(evall);
+//		selector.setSearch(ranker);
+//		selector.setInputFormat(data1);
+//		data1 = Filter.useFilter(data1, selector);
 
 		/** Randomize and stratify the dataset*/
 		data1.randomize(new Random(1)); 	

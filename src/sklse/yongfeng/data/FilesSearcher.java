@@ -40,9 +40,10 @@ public class FilesSearcher {
 	}
 	
 	/***
-	 * <p>To search filtered .arff files under the directory. Note that we ONLY collect the files whose path contains <b>filter</b> string.</p>
+	 * <p>To search filtered .arff files under the directory. Note that we ONLY collect 
+	 * the files whose path startsWith <b>filter</b> string.</p>
 	 * @param directory path
-	 * @param filter filter string
+	 * @param filter filename must startWith this string.
 	 * @return String[] paths
 	 */
 	public static String[] search(String directory, String filter){
@@ -53,7 +54,37 @@ public class FilesSearcher {
 		List<String> lspaths = new ArrayList<String>();
 		
 		for(int i=0; i<files.length; i++){
-			if(files[i].isFile() && files[i].getPath().contains(".arff") && files[i].getPath().contains(filter)){
+			if(files[i].isFile() && files[i].getPath().contains(".arff") && files[i].getName().startsWith(filter)){
+				lspaths.add(files[i].getAbsolutePath());
+			}
+		}
+		
+		String[] paths = new String[lspaths.size()];
+		
+		
+		for(int k=0; k<lspaths.size(); k++){
+			paths[k] = lspaths.get(k);
+		}
+		
+		return paths;
+	}
+	
+	/***
+	 * <p>To search filtered .arff files under the directory. Note that we ONLY collect 
+	 * the files whose path contains <b>index</b> integer.</p>
+	 * @param directory path
+	 * @param index filename must contain this integer
+	 * @return String[] paths
+	 */
+	public static String[] search(String directory, int index){
+		
+		File file = new File(directory);
+		File[] files = file.listFiles();
+		
+		List<String> lspaths = new ArrayList<String>();
+		
+		for(int i=0; i<files.length; i++){
+			if(files[i].isFile() && files[i].getPath().contains(".arff") && files[i].getName().contains(String.valueOf(index) + ".")){
 				lspaths.add(files[i].getAbsolutePath());
 			}
 		}

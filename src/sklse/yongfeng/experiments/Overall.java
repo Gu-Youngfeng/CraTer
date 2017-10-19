@@ -1,7 +1,11 @@
 package sklse.yongfeng.experiments;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
+import sklse.yongfeng.data.FilesSearcher;
+import sklse.yongfeng.data.InsMerge;
 import weka.classifiers.Classifier;
 import weka.classifiers.bayes.BayesNet;
 import weka.classifiers.evaluation.Evaluation;
@@ -22,67 +26,130 @@ import weka.filters.supervised.instance.SMOTE;
  */
 public class Overall {
 	
+	public static double[] results = new double[7];
+	
+	public static List<String[]> datasets = new ArrayList<>();
+	
 	public static void main(String[] args) throws Exception {
-		//dataset loading and class index setting
-		Instances all = DataSource.read("files\\new-total3500.arff");
-		all.setClassIndex(all.numAttributes()-1);
 		
-		//Resampling strategy
-//		Resample rsa = new Resample();
-//		rsa.setInputFormat(all);
-//		all = rsa.useFilter(all, rsa);
+//		/** Find the dataset with the same index*/
+//		for(int i=0; i<10; i++){
+//			String[] paths = FilesSearcher.search("D:/Users/LEE/Desktop/New_Data/", (i+1));
+//			datasets.add(paths); 
+//		}	
+//		
+//		/** Merge the dataset with the same index*/
+//		for(String[] data: datasets){  
+//			InsMerge.getIns(data, "D:/Users/LEE/Desktop/New_Data/");
+//		}
+			
+		/** Search for the new-total3500XXX.arff*/
+		String[] paths = FilesSearcher.search("D:/Users/LEE/Desktop/New_Data/", "new-total");
+
+		/** Get Result*/
+		for(String path: paths){
+			getEvalResult(path);
+		}
+
+	}
+	
+	/***
+	 * <p>To get 10-fold cross validation in one single arff in <b>path</b></p>
+	 * @param path arff file
+	 * @throws Exception
+	 */
+	public static void getEvalResult(String path) throws Exception{
 		
-		// smote
+//		System.out.println(path);
+		
+		Instances ins = DataSource.read(path);
+		int numAttr = ins.numAttributes();
+		ins.setClassIndex(numAttr - 1);
+		
 		SMOTE smote = new SMOTE();
-		smote.setInputFormat(all);
+		smote.setInputFormat(ins);
 		
-		FilteredClassifier fc = new FilteredClassifier();
-		
-		//Classifiers setting
-		RandomForest rf = new RandomForest(); // rf
-//		rf.setNumIterations(300);
-		
-		BayesNet bn = new BayesNet(); //bn
-		
-		SMO smo = new SMO(); //smo
-		
-		KStar ks = new KStar(); //kstar
-		
-		LibSVM svm = new LibSVM(); //svm
-		
+		/** classifiers setting*/
+		RandomForest rf = new RandomForest();		
+		BayesNet bn = new BayesNet();	
+		SMO smo = new SMO();	
+		KStar ks = new KStar();	
+		LibSVM svm = new LibSVM();
 		J48 j48 = new J48();
 		
-//		FilteredClassifier fc = new FilteredClassifier();
-//		fc.buildClassifier(all);
-//		fc.setFilter(rsa);
-		
-		//classifiers array cfs[]
-		Classifier[] cfs = {rf, j48, bn, smo, ks, svm};		
-//		Classifier[] cfs = {rf};	
-		
-		//computing results among different classifiers
-		for(int i=0;i<cfs.length;i++){
+		FilteredClassifier fc = new FilteredClassifier();
 
+		Classifier[] cfs = {j48, rf, bn, smo, ks, svm};	
+		
+		/**No Format*/
+		for(int i=0;i<cfs.length;i++){
+			
+			/** fc is the FilteredClassifier*/
 			fc.setClassifier(cfs[i]);
 			fc.setFilter(smote);
 			
-			Evaluation eval = new Evaluation(all);
-			eval.crossValidateModel(fc, all, 10, new Random(1)); //10-fold cross-validation 
+//			String clfName = cfs[i].getClass().getSimpleName();
 			
-			/**Latex format*/
-			System.out.print(cfs[i].getClass().getSimpleName());
-			System.out.printf(" & %4.3f & %4.3f & %4.3f", eval.precision(0), eval.recall(0), eval.fMeasure(0));
-			System.out.printf(" & %4.3f & %4.3f & %4.3f", eval.precision(1), eval.recall(1), eval.fMeasure(1));
-			System.out.printf(" & %4.3f \\\\\\hline\n", (1-eval.errorRate()));
+			Evaluation eval = new Evaluation(ins);
 			
-			/**HTML format*/
-//			System.out.print("<tr><td>" + cfs[i].getClass().getSimpleName());
-//			System.out.print("</td><td>" + df.format(eval.precision(0)) + "</td><td>" + df.format(eval.recall(0)) + "</td><td>" + df.format(eval.fMeasure(0)));
-//			System.out.print("</td><td>" + df.format(eval.precision(1)) + "</td><td>" + df.format(eval.recall(1)) + "</td><td>" + df.format(eval.fMeasure(1)));
-//			System.out.println("</td><td>" + df.format(1-eval.errorRate()) + "</td></tr>");
-
+			eval.crossValidateModel(fc, ins, 10, new Random(1));
+			
+			System.out.printf("%-15s: ", cfs[i].toString());
+			System.out.printf(" %4.3f %4.3f %4.3f", eval.precision(0), eval.recall(0), eval.fMeasure(0));
+			System.out.printf(" %4.3f %4.3f %4.3f", eval.precision(1), eval.recall(1), eval.fMeasure(1));
+			System.out.printf(" %4.3f \n\n", (1-eval.errorRate()));
+//			results[0] = eval.precision(0);
+//			results[1] = eval.recall(0);
+//			results[2] = eval.fMeasure(0);
+//			results[3] = eval.precision(1);
+//			results[4] = eval.recall(1);
+//			results[5] = eval.fMeasure(1);
+//			results[6] = 1-eval.errorRate();
+			
 		}
-
+		
+		/**HTML Format*/
+//	    System.out.print("<tr><td rowspan='7'>" + projectNames[0] + "</td>");
+//		for(int i=0;i<cfs.length;i++){
+//			
+//		cfs[i].buildClassifier(ins);
+//			fc.setClassifier(cfs[i]);
+//			fc.setFilter(smote);
+//			
+//			String clfName = cfs[i].getClass().getSimpleName();
+//			
+//			Evaluation eval = new Evaluation(ins);
+//			
+//			eval.crossValidateModel(fc, ins, 10, new Random(1));
+//	
+//			System.out.print("<tr><td>" + clfName);
+//			System.out.printf("</td><td>%4.3f</td><td>%4.3f</td><td>%4.3f",eval.precision(0), eval.recall(0), eval.fMeasure(0));
+//			System.out.printf("</td><td>%4.3f</td><td>%4.3f</td><td>%4.3f",eval.precision(1), eval.recall(1), eval.fMeasure(1));
+//			System.out.printf("</td><td>%4.3f</td></tr>\n", (1-eval.errorRate()));
+//		}
+		
+		/**Latex format*/
+//		System.out.print("\\hline\\hline\n\\multirow{5}{*}{\\rotatebox{-90}{" + projectNames[0] + "$^{\\ddag}$}} ");
+//		for(int i=0;i<cfs.length;i++){
+//			
+//		cfs[i].buildClassifier(ins);
+//			fc.setClassifier(cfs[i]);
+//			fc.setFilter(smote);
+//			
+//			String clfName = cfs[i].getClass().getSimpleName();
+//			
+//			Evaluation eval = new Evaluation(ins);
+//			
+//			eval.crossValidateModel(fc, ins, 10, new Random(1));
+//			
+//			// print in LaTex format
+//			System.out.print("& " + clfName);
+//			System.out.printf(" & %4.3f & %4.3f & %4.3f", eval.precision(0), eval.recall(0), eval.fMeasure(0));
+//			System.out.printf(" & %4.3f & %4.3f & %4.3f", eval.precision(1), eval.recall(1), eval.fMeasure(1));
+//			System.out.printf(" & %4.3f \\\\\n", (1-eval.errorRate()));
+//		}
+//		System.out.println("");
+		
 	}
 
 }

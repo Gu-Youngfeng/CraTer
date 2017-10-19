@@ -17,7 +17,7 @@ public class InsMerge {
 		String[] path = {"files/codec500.arff",
 				"files/ormlite500.arff", "files/jsqlparser500.arff", "files/collections500.arff",
 				"files/io500.arff", "files/jsoup500.arff", "files/mango500.arff"};
-		getIns(path);
+		getIns(path, "D:/Users/LEE/Desktop/New_Data/");
 	}
 	
 	/***
@@ -26,10 +26,10 @@ public class InsMerge {
 	 * @param path String array of arff file
 	 * @throws Exception
 	 */
-	public static void getIns(String[] path) throws Exception{
+	public static void getIns(String[] path, String dirpath) throws Exception{
 		
 		Instances data = DataSource.read("files/total3500.arff");
-//		Instances data = null;
+		
 		data.setClassIndex(data.numAttributes() - 1);
 		
 		int len = path.length;
@@ -45,7 +45,7 @@ public class InsMerge {
 			System.out.println("data" + data.numInstances() + "\n");
 		}
 		
-		DataSink.write("files/new-total3500.arff", data);
+		DataSink.write(dirpath+"new-total3500" + String.valueOf(System.currentTimeMillis()) + ".arff", data);
 		System.out.println("Writing the data into files/total3500.arff successfully.");
 	}
 
