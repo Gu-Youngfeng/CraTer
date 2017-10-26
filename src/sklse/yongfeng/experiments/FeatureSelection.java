@@ -174,7 +174,7 @@ public class FeatureSelection {
 	
 		for(int i=0; i<ins.length; i++){
 			
-			/**chi-squared filter to process the whole dataset first*/
+			/**information gain filter to process the whole dataset first*/
 			InfoGainAttributeEval evall = new InfoGainAttributeEval();	
 			Ranker ranker = new Ranker();
 			AttributeSelection selector = new AttributeSelection();
@@ -205,7 +205,7 @@ public class FeatureSelection {
 	
 		for(int i=0; i<ins.length; i++){
 			
-			/**chi-squared filter to process the whole dataset first*/
+			/**information gain ratio filter to process the whole dataset first*/
 			GainRatioAttributeEval evall = new GainRatioAttributeEval();	
 			Ranker ranker = new Ranker();
 			AttributeSelection selector = new AttributeSelection();
@@ -236,7 +236,7 @@ public class FeatureSelection {
 	
 		for(int i=0; i<ins.length; i++){
 			
-			/**pearson filter to process the whole dataset first*/
+			/**correlation filter to process the whole dataset first*/
 			CorrelationAttributeEval evall = new CorrelationAttributeEval();	
 			Ranker ranker = new Ranker();
 			AttributeSelection selector = new AttributeSelection();
