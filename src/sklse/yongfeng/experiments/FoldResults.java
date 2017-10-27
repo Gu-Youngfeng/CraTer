@@ -3,10 +3,7 @@ package sklse.yongfeng.experiments;
 
 import java.util.Random;
 
-import sklse.yongfeng.data.FilesSearcher;
 import weka.attributeSelection.ChiSquaredAttributeEval;
-//import weka.attributeSelection.CorrelationAttributeEval;
-//import weka.attributeSelection.InfoGainAttributeEval;
 import weka.attributeSelection.Ranker;
 import weka.classifiers.evaluation.Evaluation;
 import weka.classifiers.trees.J48;
@@ -36,12 +33,11 @@ class FoldResults {
 				"files\\jsoup500.arff",
 				"files\\mango500.arff"
 				};
-//		String[] ARFFs = FilesSearcher.search("D:\\Users\\LEE\\Desktop\\New_Data");
-//		
+	
 		/**10-fold cross validation*/
 //		System.out.println("----------  70 results without Feature Selection  ----------");
 //		for(int i=0; i<ARFFs.length; i++){
-//			for(int k=0; k<10; k++){ // for each project, we conduct 10-fold cross validation for 10 times
+//			for(int k=1; k<2; k++){ // for each project, we conduct 10-fold cross validation for 10 times
 //				showFolds(ARFFs[i], k); // without feature selection		
 //			}
 //		}
@@ -49,7 +45,7 @@ class FoldResults {
 //		System.out.println("\n----------  70 results with Feature Selection  ----------");
 		/**10-fold cross validation*/
 		for(int i=0; i<ARFFs.length; i++){
-			for(int k=0; k<10; k++){ // for each project, we conduct 10-fold cross validation for 10 times
+			for(int k=0; k<1; k++){ // for each project, we conduct 10-fold cross validation for 10 times
 				showFolds(ARFFs[i], k, 1); // with feature selection		
 			}
 		}
@@ -80,9 +76,9 @@ class FoldResults {
 			Instances train = data1.trainCV(10, i);
 			
 			/** SMOTE */
-//			SMOTE smote = new SMOTE();
-//			smote.setInputFormat(train);
-//			train = Filter.useFilter(train, smote);
+			SMOTE smote = new SMOTE();
+			smote.setInputFormat(train);
+			train = Filter.useFilter(train, smote);
 
 			/** C4.5 */
 			J48 rf = new J48();
@@ -131,13 +127,13 @@ class FoldResults {
 			return;
 		
 		/** Feature Selection: Chi-square */
-//		ChiSquaredAttributeEval evall = new ChiSquaredAttributeEval();	// here we can replace the Chi-square with Correlation, Information Gain, or other validation methods
-//		Ranker ranker = new Ranker();
-//		AttributeSelection selector = new AttributeSelection();		
-//		selector.setEvaluator(evall);
-//		selector.setSearch(ranker);
-//		selector.setInputFormat(data1);
-//		data1 = Filter.useFilter(data1, selector);
+		ChiSquaredAttributeEval evall = new ChiSquaredAttributeEval();	// here we can replace the Chi-square with Correlation, Information Gain, or other validation methods
+		Ranker ranker = new Ranker();
+		AttributeSelection selector = new AttributeSelection();		
+		selector.setEvaluator(evall);
+		selector.setSearch(ranker);
+		selector.setInputFormat(data1);
+		data1 = Filter.useFilter(data1, selector);
 
 		/** Randomize and stratify the dataset*/
 		data1.randomize(new Random(1)); 	
