@@ -34,7 +34,9 @@ public class Single {
 	private static double[][] results = new double[60][7];
 	
 	/** To save all 6 classifiers' name*/
-	private static String[] classifiers = {"C4.5", "RandForest", "BayesNet", "SMO", "KStar", "SVM"};
+	private static String[] classifiers = {"C4.5", "RandomForest", "BayesNet", "SMO", "KStar", "SVM"};
+	
+	private static String[] projectNames = {"COD", "ORM", "JSQ", "COL", "IO", "JSO", "MAN"};
 
 	public static void main(String[] args) throws Exception {
 		
@@ -66,13 +68,14 @@ public class Single {
 		dataCollection.add(pathsJSO);
 		dataCollection.add(pathsMAN);	
 		
-		for(String[] dataset: dataCollection){ // for each project
+//		for(String[] dataset: dataCollection){ // for each project
+		for(int m=0; m<dataCollection.size(); m++){
 			int index = 0;
-			for(String arffs: dataset){ // each project has 10 arff files
+			for(String arffs: dataCollection.get(m)){ // each project has 10 arff files
 				getEvalResult(arffs, index);
 				index += 6;
 			}
-			
+			System.out.print("\\hline\\hline\n\\multirow{5}{*}{\\rotatebox{+0}{" + projectNames[m] + "$^{\\dag}$}}");
 			for(int j=0; j<6; j++){ // for each classifier
 				double p0 = 0.0d, 
 					   p1 = 0.0d, 
@@ -91,10 +94,11 @@ public class Single {
 					acc += results[i][6];
 				}
 				
-				System.out.printf("%-15s: %6.3f, %6.3f, %6.3f, %6.3f, %6.3f, %6.3f, %6.3f\n", 
+				System.out.printf("& %s & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f \\\n", 
 						classifiers[j], p0*1.0/10.0, r0*1.0/10.0, f0*1.0/10.0, p1*1.0/10.0, r1*1.0/10.0, f1*1.0/10.0, acc*1.0/10.0);
 				//print the average of 10 times
 			}
+			System.out.println("\n");
 		}
 				
 	}

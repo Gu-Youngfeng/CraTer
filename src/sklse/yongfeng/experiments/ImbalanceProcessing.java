@@ -22,7 +22,7 @@ import weka.filters.supervised.instance.SMOTE;
  * <p>* We use the C4.5 as our default classifier.</p>
  *
  */
-class ImbalanceProcessing {
+public class ImbalanceProcessing {
 	
 	/**short-cut name for projects*/
 	private static String[] projectNames = {"COD", "ORM", "JSQ", "COL", "IO", "JSO", "MAN"};
