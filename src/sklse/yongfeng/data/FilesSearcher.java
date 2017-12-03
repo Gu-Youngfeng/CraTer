@@ -5,15 +5,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /***
- * <p>This class <b>FilesSearcher</b> is used to search .arff files under the given directories.</p>
- * <p>It provide two methods to return suitable files: {@link#search(String)} and {@link#search(String, String)}</p>
- *
+ * <p>This class <b>FilesSearcher</b> is used to search datasets(<b>arff</b> files) under the given directories. 
+ * It provide three methods to return datasets: 
+ * <li>{@link#search(directory)}, which return the datasets under the directory.</li>
+ * <li>{@link#search(directory, filter)}, which return the datasets under the directory and name startsWith filter.</li>
+ * <li>{@link#search(directory, index)}, which return the datasets under the directory and name contains index number.</li>
+ * </p>
  */
 public class FilesSearcher {
 	
 	/***
-	 * <p>To search all .arff files under the directory</p>
-	 * @param directory path
+	 * <p>To search all arff files under the directory</p>
+	 * @param directory search scope
 	 * @return String[] paths
 	 */
 	public static String[] search(String directory){
@@ -29,8 +32,7 @@ public class FilesSearcher {
 			}
 		}
 		
-		String[] paths = new String[lspaths.size()];
-		
+		String[] paths = new String[lspaths.size()];	
 		
 		for(int k=0; k<lspaths.size(); k++){
 			paths[k] = lspaths.get(k);
@@ -40,10 +42,10 @@ public class FilesSearcher {
 	}
 	
 	/***
-	 * <p>To search filtered .arff files under the directory. Note that we ONLY collect 
-	 * the files whose path startsWith <b>filter</b> string.</p>
-	 * @param directory path
-	 * @param filter filename must startWith this string.
+	 * <p>To search filtered arff files under the directory. Note that we ONLY collect 
+	 * the files whose file name startsWith specify <b>filter</b> string.</p>
+	 * @param directory search scope
+	 * @param filter filename must startsWith this string.
 	 * @return String[] paths
 	 */
 	public static String[] search(String directory, String filter){
@@ -59,8 +61,7 @@ public class FilesSearcher {
 			}
 		}
 		
-		String[] paths = new String[lspaths.size()];
-		
+		String[] paths = new String[lspaths.size()];		
 		
 		for(int k=0; k<lspaths.size(); k++){
 			paths[k] = lspaths.get(k);
@@ -71,7 +72,7 @@ public class FilesSearcher {
 	
 	/***
 	 * <p>To search filtered .arff files under the directory. Note that we ONLY collect 
-	 * the files whose path contains <b>index</b> integer.</p>
+	 * the files whose file name contains specify <b>index</b> number.</p>
 	 * @param directory path
 	 * @param index filename must contain this integer
 	 * @return String[] paths
@@ -89,8 +90,7 @@ public class FilesSearcher {
 			}
 		}
 		
-		String[] paths = new String[lspaths.size()];
-		
+		String[] paths = new String[lspaths.size()];	
 		
 		for(int k=0; k<lspaths.size(); k++){
 			paths[k] = lspaths.get(k);

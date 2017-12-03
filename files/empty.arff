@@ -1,4 +1,4 @@
-@relation total1400
+@relation example
 
 @attribute ST01 numeric
 @attribute ST02 numeric
