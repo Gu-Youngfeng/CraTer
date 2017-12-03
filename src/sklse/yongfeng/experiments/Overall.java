@@ -33,6 +33,17 @@ public class Overall {
 	
 	public static void main(String[] args) throws Exception {
 		
+		System.out.println("EQ. Results on total dataset (average result of 10 total dataset).");
+		System.out.println("-------------------------------------------------");
+		System.out.println("1. Experiment setup");
+		System.out.println("   Classifiers      : C4.5, Random Forest, Bayes Net, SMO, KStar, SVM\n");
+		System.out.println("2. Output format");
+		System.out.println("   [classifier] | precision(inTrace) recall(inTrace) fmeasure(inTrace) precision(outTrace) recall(outTrace) fmeasure(outTrace) Accuracy\n");
+		System.out.println("3. Time Consumption");
+		System.out.println("   It will take about 30 minutes to get the final results.");
+
+		System.out.println("-------------------------------------------------");
+		
 		/** Get average results from 10 datasets (each of which has 3500 crashes).*/			
 		getEvalResultByAve("files/total/");
 
@@ -77,11 +88,11 @@ public class Overall {
 			
 			eval.crossValidateModel(fc, ins, 10, new Random(1));
 			
-			System.out.println("--------------");
-			System.out.printf("%-15s: ", classifiers[i]);
-			System.out.printf(" %4.3f %4.3f %4.3f", eval.precision(0), eval.recall(0), eval.fMeasure(0));
-			System.out.printf(" %4.3f %4.3f %4.3f", eval.precision(1), eval.recall(1), eval.fMeasure(1));
-			System.out.printf(" %4.3f \n\n", (1-eval.errorRate()));
+//			System.out.println("--------------");
+//			System.out.printf("%-15s: ", classifiers[i]);
+//			System.out.printf(" %4.3f %4.3f %4.3f", eval.precision(0), eval.recall(0), eval.fMeasure(0));
+//			System.out.printf(" %4.3f %4.3f %4.3f", eval.precision(1), eval.recall(1), eval.fMeasure(1));
+//			System.out.printf(" %4.3f \n\n", (1-eval.errorRate()));
 			results[index + i][0] = eval.precision(0);
 			results[index + i][1] = eval.recall(0);
 			results[index + i][2] = eval.fMeasure(0);
@@ -170,7 +181,7 @@ public class Overall {
 				
 				//print the average of 10 times
 				System.out.printf("%-15s: %6.3f, %6.3f, %6.3f, %6.3f, %6.3f, %6.3f, %6.3f\n", 
-						classifiers[j], p0*1.0/10.0, r0*1.0/10.0, f0*1.0/10.0, p1*1.0/10.0, r1*1.0/10.0, f1*1.0/10.0, acc*1.0/10.0);
+						"[" + classifiers[j] + "]", p0*1.0/10.0, r0*1.0/10.0, f0*1.0/10.0, p1*1.0/10.0, r1*1.0/10.0, f1*1.0/10.0, acc*1.0/10.0);
 				
 		}
 	}

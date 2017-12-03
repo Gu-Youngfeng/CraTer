@@ -28,29 +28,175 @@ public class ImbalanceProcessingAve {
 	private static double[][] results = new double[10][7];
 	
 	/**short-cut name for projects*/
-//	private static String[] projectNames = {"COD", "ORM", "JSQ", "COL", "IO", "JSO", "MAN"};
+	private static String[] projectNames = {"codec", "ormlite", "jsqlparser", "collections", "io", "jsoup", "mango"};
 
 	public static void main(String[] args) throws Exception{
-		String[] pathsCode = FilesSearcher.search("D:/Users/LEE/Desktop/New_Data/", "codec");
-		String[] pathsORM = FilesSearcher.search("D:/Users/LEE/Desktop/New_Data/", "ormlite");
-		String[] pathsJSQ = FilesSearcher.search("D:/Users/LEE/Desktop/New_Data/", "jsqlparser");
-		String[] pathsCOL = FilesSearcher.search("D:/Users/LEE/Desktop/New_Data/", "collections");
-		String[] pathsIO = FilesSearcher.search("D:/Users/LEE/Desktop/New_Data/", "io");
-		String[] pathsJSO = FilesSearcher.search("D:/Users/LEE/Desktop/New_Data/", "jsoup");
-		String[] pathsMAN = FilesSearcher.search("D:/Users/LEE/Desktop/New_Data/", "mango");
 		
-		List<String[]> dataCollection = new ArrayList<>(); // add all 7 path arrays into the list
-		dataCollection.add(pathsCode);
-		dataCollection.add(pathsORM);
-		dataCollection.add(pathsJSQ);
-		dataCollection.add(pathsCOL);
-		dataCollection.add(pathsIO);
-		dataCollection.add(pathsJSO);
-		dataCollection.add(pathsMAN);	
+		System.out.println("EQ. Contrast experiments among using different imbalanced process methods.");
+		System.out.println("-------------------------------------------------");
+		System.out.println("1. Experiment setup");
+		System.out.println("   NoStrategy        : C4.5");
+		System.out.println("   SMOTE             : C4.5 + SMOTE");
+		System.out.println("   Cost-sensitive    : C4.5 + Cost-sensitive learning");
+		System.out.println("   Resampling        : C4.5 + Resampling\n");
+		System.out.println("2. Output format");
+		System.out.println("   [project] | precision(inTrace) recall(inTrace) fmeasure(inTrace) precision(outTrace) recall(outTrace) fmeasure(outTrace) Accuracy\n");
+		System.out.println("3. Time Consumption");
+		System.out.println("   It will take about 2 minutes to get the final results.");
+		System.out.println("-------------------------------------------------");
 		
-		for(String[] dataset: dataCollection){ // for each project
+		/** add all 7 path arrays into the list dataCollection */
+		List<String[]> dataCollection = new ArrayList<>(); 
+		
+		for(int i=0; i< projectNames.length ;i++){
+			String[] paths = FilesSearcher.search("files/generated/", projectNames[i]);
+			dataCollection.add(paths);
+		}	
+		
+		/** Using different methods to process imbalanced data. */
+		selectNoStrategy(dataCollection);	
+		selectSMOTE(dataCollection);
+		selectCost(dataCollection);
+		selectResampling(dataCollection);
+	}
+	
+	/***
+	 * <p>To print the average result using NoStrategy.</p>
+	 * @param dataCollection
+	 * @throws Exception
+	 */
+	public static void selectNoStrategy(List<String[]> dataCollection) throws Exception{
+		
+		System.out.println("\nAverage Results Using [ NoStrategy ]: \n");
+		
+		for(int k=0; k<dataCollection.size(); k++){  // for each project
 			int index = 0;
-			for(String arffs: dataset){ // each project has 10 arff files
+			
+			for(String arffs: dataCollection.get(k)){ // each project has 10 arff files
+
+				getEvalResultbyNo(arffs, index); 
+//				getEvalResultbySMOTE(arffs, index);
+//				getEvalResultbyCost(arffs, index);
+//				getEvalResultbyResampling(arffs, index);
+				index += 1;
+			}
+			double p0 = 0.0d, 
+					   p1 = 0.0d, 
+					   r0 = 0.0d, 
+					   r1 = 0.0d,
+					   f0 = 0.0d,
+					   f1 = 0.0d,
+					   acc = 0.0d;
+			for(int m=0; m<10; m++){
+				p0 += results[m][0];
+				r0 += results[m][1];
+				f0 += results[m][2];
+				p1 += results[m][3];
+				r1 += results[m][4];
+				f1 += results[m][5];
+				acc += results[m][6];
+			}
+			System.out.printf("%-15s | %6.3f %6.3f %6.3f %6.3f %6.3f %6.3f %6.3f\n", 
+					projectNames[k], p0*1.0/10.0, r0*1.0/10.0, f0*1.0/10.0, p1*1.0/10.0, r1*1.0/10.0, f1*1.0/10.0, acc*1.0/10.0);
+		}
+	}
+	
+	/***
+	 * <p>To print the average result using SMOTE.</p>
+	 * @param dataCollection
+	 * @throws Exception
+	 */
+	public static void selectSMOTE(List<String[]> dataCollection) throws Exception{
+		
+		System.out.println("\nAverage Results Using [ SMOTE ]: \n");
+		
+		for(int k=0; k<dataCollection.size(); k++){  // for each project
+			int index = 0;
+			
+			for(String arffs: dataCollection.get(k)){ // each project has 10 arff files
+
+//				getEvalResultbyNo(arffs, index); 
+				getEvalResultbySMOTE(arffs, index);
+//				getEvalResultbyCost(arffs, index);
+//				getEvalResultbyResampling(arffs, index);
+				index += 1;
+			}
+			double p0 = 0.0d, 
+					   p1 = 0.0d, 
+					   r0 = 0.0d, 
+					   r1 = 0.0d,
+					   f0 = 0.0d,
+					   f1 = 0.0d,
+					   acc = 0.0d;
+			for(int m=0; m<10; m++){
+				p0 += results[m][0];
+				r0 += results[m][1];
+				f0 += results[m][2];
+				p1 += results[m][3];
+				r1 += results[m][4];
+				f1 += results[m][5];
+				acc += results[m][6];
+			}
+			System.out.printf("%-15s | %6.3f %6.3f %6.3f %6.3f %6.3f %6.3f %6.3f\n", 
+					projectNames[k], p0*1.0/10.0, r0*1.0/10.0, f0*1.0/10.0, p1*1.0/10.0, r1*1.0/10.0, f1*1.0/10.0, acc*1.0/10.0);
+		}
+	}
+	
+	/***
+	 * <p>To print the average result using Cost sensitive learning.</p>
+	 * @param dataCollection
+	 * @throws Exception
+	 */
+	public static void selectCost(List<String[]> dataCollection) throws Exception{
+		
+		System.out.println("\nAverage Results Using [ Cost sensitive learning ]: \n");
+		
+		for(int k=0; k<dataCollection.size(); k++){  // for each project
+			int index = 0;
+			
+			for(String arffs: dataCollection.get(k)){ // each project has 10 arff files
+
+//				getEvalResultbyNo(arffs, index); 
+//				getEvalResultbySMOTE(arffs, index);
+				getEvalResultbyCost(arffs, index);
+//				getEvalResultbyResampling(arffs, index);
+				index += 1;
+			}
+			double p0 = 0.0d, 
+					   p1 = 0.0d, 
+					   r0 = 0.0d, 
+					   r1 = 0.0d,
+					   f0 = 0.0d,
+					   f1 = 0.0d,
+					   acc = 0.0d;
+			for(int m=0; m<10; m++){
+				p0 += results[m][0];
+				r0 += results[m][1];
+				f0 += results[m][2];
+				p1 += results[m][3];
+				r1 += results[m][4];
+				f1 += results[m][5];
+				acc += results[m][6];
+			}
+			System.out.printf("%-15s | %6.3f %6.3f %6.3f %6.3f %6.3f %6.3f %6.3f\n", 
+					projectNames[k], p0*1.0/10.0, r0*1.0/10.0, f0*1.0/10.0, p1*1.0/10.0, r1*1.0/10.0, f1*1.0/10.0, acc*1.0/10.0);
+		}
+	}
+	
+	/***
+	 * <p>To print the average result using Resampling.</p>
+	 * @param dataCollection
+	 * @throws Exception
+	 */
+	public static void selectResampling(List<String[]> dataCollection) throws Exception{
+		
+		System.out.println("\nAverage Results Using [ Resampling ]: \n");
+		
+		for(int k=0; k<dataCollection.size(); k++){  // for each project
+			int index = 0;
+			
+			for(String arffs: dataCollection.get(k)){ // each project has 10 arff files
+
 //				getEvalResultbyNo(arffs, index); 
 //				getEvalResultbySMOTE(arffs, index);
 //				getEvalResultbyCost(arffs, index);
@@ -73,11 +219,9 @@ public class ImbalanceProcessingAve {
 				f1 += results[m][5];
 				acc += results[m][6];
 			}
-			System.out.printf("%6.3f %6.3f %6.3f %6.3f %6.3f %6.3f %6.3f\n", 
-					p0*1.0/10.0, r0*1.0/10.0, f0*1.0/10.0, p1*1.0/10.0, r1*1.0/10.0, f1*1.0/10.0, acc*1.0/10.0);
-
-		}			
-
+			System.out.printf("%-15s | %6.3f %6.3f %6.3f %6.3f %6.3f %6.3f %6.3f\n", 
+					projectNames[k], p0*1.0/10.0, r0*1.0/10.0, f0*1.0/10.0, p1*1.0/10.0, r1*1.0/10.0, f1*1.0/10.0, acc*1.0/10.0);
+		}
 	}
 	
 	/***
