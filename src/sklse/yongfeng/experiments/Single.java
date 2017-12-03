@@ -3,7 +3,6 @@ package sklse.yongfeng.experiments;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import sklse.yongfeng.experiments.Overall;
 
 import sklse.yongfeng.data.FilesSearcher;
 import weka.classifiers.Classifier;
@@ -36,46 +35,36 @@ public class Single {
 	/** To save all 6 classifiers' name*/
 	private static String[] classifiers = {"C4.5", "RandomForest", "BayesNet", "SMO", "KStar", "SVM"};
 	
-	private static String[] projectNames = {"COD", "ORM", "JSQ", "COL", "IO", "JSO", "MAN"};
+	private static String[] projectNames = {"codec", "ormlite", "jsqlparser", "collections", "io", "jsoup", "mango"};
 
 	public static void main(String[] args) throws Exception {
 		
 		/** (i) Directly get evaluation results from 1 dataset(each project has 1 dataset) */
-		//TODO: You must change the absolute path in search method.
-//		String[] paths = {"files/codec500.arff",
-//				"files/ormlite500.arff", "files/jsqlparser500.arff", "files/collections500.arff",
-//				"files/io500.arff", "files/jsoup500.arff", "files/mango500.arff"};
+//		String[] paths = {"files/generated/codec1.arff",
+//				"files/generated/ormlite1.arff", "files/generated/jsqlparser1.arff", "files/generated/collections1.arff",
+//				"files/generated/io1.arff", "files/generated/jsoup1.arff", "files/generated/mango1.arff"};
 //		for(String path: paths){
 //			getEvalResult(path, 0);
 //		}
 		
 		/** (ii) Calculate the average evaluation results from 10 datasets(each project has 10 datasets)*/
-		//TODO: You must change the absolute path in search method.
-		String[] pathsCode = FilesSearcher.search("D:/Users/LEE/Desktop/New_Data/", "codec");
-		String[] pathsORM = FilesSearcher.search("D:/Users/LEE/Desktop/New_Data/", "ormlite");
-		String[] pathsJSQ = FilesSearcher.search("D:/Users/LEE/Desktop/New_Data/", "jsqlparser");
-		String[] pathsCOL = FilesSearcher.search("D:/Users/LEE/Desktop/New_Data/", "collections");
-		String[] pathsIO = FilesSearcher.search("D:/Users/LEE/Desktop/New_Data/", "io");
-		String[] pathsJSO = FilesSearcher.search("D:/Users/LEE/Desktop/New_Data/", "jsoup");
-		String[] pathsMAN = FilesSearcher.search("D:/Users/LEE/Desktop/New_Data/", "mango");
+		/** add all 7 path arrays into the list dataCollection */
+		List<String[]> dataCollection = new ArrayList<>(); 
 		
-		List<String[]> dataCollection = new ArrayList<>(); // add all 7 path arrays into the list
-		dataCollection.add(pathsCode);
-		dataCollection.add(pathsORM);
-		dataCollection.add(pathsJSQ);
-		dataCollection.add(pathsCOL);
-		dataCollection.add(pathsIO);
-		dataCollection.add(pathsJSO);
-		dataCollection.add(pathsMAN);	
+		for(int i=0; i< projectNames.length ;i++){
+			String[] paths = FilesSearcher.search("files/generated/", projectNames[i]);
+			dataCollection.add(paths);
+		}	
 		
-//		for(String[] dataset: dataCollection){ // for each project
-		for(int m=0; m<dataCollection.size(); m++){
+		for(int m=0; m<dataCollection.size(); m++){ // dataCollection.get(m) is dataset array of one project
 			int index = 0;
-			for(String arffs: dataCollection.get(m)){ // each project has 10 arff files
+			for(String arffs: dataCollection.get(m)){ // arff is one dataset of dataset list
 				getEvalResult(arffs, index);
 				index += 6;
 			}
-			System.out.print("\\hline\\hline\n\\multirow{5}{*}{\\rotatebox{+0}{" + projectNames[m] + "$^{\\dag}$}}");
+
+			System.out.println("\nAverage Results of " + projectNames[m] + "\n------------------------\n");
+			
 			for(int j=0; j<6; j++){ // for each classifier
 				double p0 = 0.0d, 
 					   p1 = 0.0d, 
@@ -94,7 +83,7 @@ public class Single {
 					acc += results[i][6];
 				}
 				
-				System.out.printf("& %s & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f \\\n", 
+				System.out.printf("%-15s : %4.3f & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f & %4.3f \n", 
 						classifiers[j], p0*1.0/10.0, r0*1.0/10.0, f0*1.0/10.0, p1*1.0/10.0, r1*1.0/10.0, f1*1.0/10.0, acc*1.0/10.0);
 				//print the average of 10 times
 			}
@@ -110,7 +99,7 @@ public class Single {
 	 */
 	public static void getEvalResult(String path, int index) throws Exception{
 		
-//		System.out.println(path);
+		System.out.println("\nDealing with [ " + path + " ] ...\n");
 		
 		Instances ins = DataSource.read(path);
 		int numAttr = ins.numAttributes();
@@ -138,16 +127,16 @@ public class Single {
 			fc.setClassifier(cfs[i]);
 			fc.setFilter(smote);
 			
-//			String clfName = cfs[i].getClass().getSimpleName();
-			
 			Evaluation eval = new Evaluation(ins);
 			
 			eval.crossValidateModel(fc, ins, 10, new Random(1));
 			
-//			System.out.printf("%-15s: ", classifiers[i]);
-//			System.out.printf(" %4.3f %4.3f %4.3f", eval.precision(0), eval.recall(0), eval.fMeasure(0));
-//			System.out.printf(" %4.3f %4.3f %4.3f", eval.precision(1), eval.recall(1), eval.fMeasure(1));
-//			System.out.printf(" %4.3f \n\n", (1-eval.errorRate()));
+			/**Middle process log starts. Comment it if you don't want to see it.*/
+			System.out.printf("%-15s: ", classifiers[i]);
+			System.out.printf(" %4.3f %4.3f %4.3f", eval.precision(0), eval.recall(0), eval.fMeasure(0));
+			System.out.printf(" %4.3f %4.3f %4.3f", eval.precision(1), eval.recall(1), eval.fMeasure(1));
+			System.out.printf(" %4.3f \n", (1-eval.errorRate()));
+			/**Middle process log ends.*/
 			results[index + i][0] = eval.precision(0);
 			results[index + i][1] = eval.recall(0);
 			results[index + i][2] = eval.fMeasure(0);

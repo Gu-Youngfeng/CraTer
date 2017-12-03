@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Random;
 
 import sklse.yongfeng.data.FilesSearcher;
-import sklse.yongfeng.data.InsMerge;
 import weka.classifiers.Classifier;
 import weka.classifiers.bayes.BayesNet;
 import weka.classifiers.evaluation.Evaluation;
@@ -22,10 +21,6 @@ import weka.filters.supervised.instance.SMOTE;
 /***
  * <p>Class <b>Overall</b> is used to get 10-fold cross validation result from 3,500 crashes.</p>
  * <p>We use <b>SMOTE</b> strategy combined with other classifiers( including <b>Random forest, C4.5, Bayesnet, SMO, Kstar, SVM</b> ) to train the model. 
- * In {@link#main(String[])}, we provide 2 kinds of methods to conduct the 10-fold cross-validation in 3500 crashes.</p>
- * <h3><b>(i)</b> Directly get results from 1 dataset with 3500 crashes;</h3>
- * <h3><b>(ii)</b> Get Average results from 10 datasets (each of which has 3500 crashes).</h3>
- * @version To be uploaded
  */
 public class Overall {
 	
@@ -38,58 +33,19 @@ public class Overall {
 	
 	public static void main(String[] args) throws Exception {
 		
-		/**(i) Directly get results from 1 dataset with 3500 crashes;*/
-		//TODO: You must change the absolute path in search method.
-//		getEvalResult("files/new-total3500.arff");
-		
-		/**(ii) Get Average results from 10 datasets (each of which has 3500 crashes).*/
-		//TODO: You must change the absolute path in search method. And if you already have dataset, you don't need to process STEP 1 and 2.
-//		for(int i=0; i<10; i++){ // STEP 1. Find the dataset with the same index in generated directory
-//			String[] paths = FilesSearcher.search("D:/Users/LEE/Desktop/New_Data/", (i+1));
-//			datasets.add(paths); 
-//		}	
-//		
-//		for(String[] data: datasets){  // STEP 2. Merge the dataset with the same index
-//			InsMerge.getIns(data, "D:/Users/LEE/Desktop/New_Data/");
-//		}
-			
-		String[] paths = FilesSearcher.search("D:/Users/LEE/Desktop/New_Data/", "new-total"); // STEP 3. Search for the new-total3500XXX.arff
-
-		for(int i=0; i<paths.length; i++){ // for each dataset, get evaluation results
-			getEvalResult(paths[i], 6*i);
-		}
-		
-		for(int j=0; j<6; j++){
-			double p0 = 0.0d, 
-					   p1 = 0.0d, 
-					   r0 = 0.0d, 
-					   r1 = 0.0d,
-					   f0 = 0.0d,
-					   f1 = 0.0d,
-					   acc = 0.0d;
-				for(int i=j; i<60; i+=6){	// for each time
-					p0 += results[i][0];
-					r0 += results[i][1];
-					f0 += results[i][2];
-					p1 += results[i][3];
-					r1 += results[i][4];
-					f1 += results[i][5];
-					acc += results[i][6];
-				}
-				
-				System.out.printf("%-15s: %6.3f, %6.3f, %6.3f, %6.3f, %6.3f, %6.3f, %6.3f\n", 
-						classifiers[j], p0*1.0/10.0, r0*1.0/10.0, f0*1.0/10.0, p1*1.0/10.0, r1*1.0/10.0, f1*1.0/10.0, acc*1.0/10.0);
-				//print the average of 10 times
-		}
+		/** Get average results from 10 datasets (each of which has 3500 crashes).*/			
+		getEvalResultByAve("files/total/");
 
 	}
 	
 	/***
-	 * <p>To get 10-fold cross validation in one single arff in <b>path</b></p>
+	 * <p>To get 10-fold cross validation of dataset(arff file) in <b>path</b>.</p>
 	 * @param path arff file
 	 * @throws Exception
 	 */
 	public static void getEvalResult(String path, int index) throws Exception{
+		
+		System.out.println("\nDealing with [ " + path + " ] ...\n");
 				
 		Instances ins = DataSource.read(path);
 		int numAttr = ins.numAttributes();
@@ -108,8 +64,7 @@ public class Overall {
 		
 		FilteredClassifier fc = new FilteredClassifier();
 
-		Classifier[] cfs = {j48, rf, bn, smo, ks, svm};	
-//		Classifier[] cfs = {j48, rf, bn};	
+		Classifier[] cfs = {j48, rf, bn, smo, ks, svm};		
 		
 		/**No Format*/
 		for(int i=0;i<cfs.length;i++){
@@ -122,7 +77,8 @@ public class Overall {
 			
 			eval.crossValidateModel(fc, ins, 10, new Random(1));
 			
-			System.out.printf("%-15s: ", cfs[i].getClass().getSimpleName());
+			System.out.println("--------------");
+			System.out.printf("%-15s: ", classifiers[i]);
 			System.out.printf(" %4.3f %4.3f %4.3f", eval.precision(0), eval.recall(0), eval.fMeasure(0));
 			System.out.printf(" %4.3f %4.3f %4.3f", eval.precision(1), eval.recall(1), eval.fMeasure(1));
 			System.out.printf(" %4.3f \n\n", (1-eval.errorRate()));
@@ -178,6 +134,45 @@ public class Overall {
 //		}
 //		System.out.println("");
 		
+	}
+	
+	/***
+	 * <p>To get average results of 10 datasets using 6 classifers</p>
+	 * <p>Specifically, we first generate 10 matrices (6*7) to record the 10-fold cross validation results.
+	 *  Then construct one total matrix (6*10*7) by combining above 10 matrices.</p>
+	 * @param folder
+	 * @throws Exception
+	 */
+	public static void getEvalResultByAve(String folder) throws Exception{
+		String[] paths = FilesSearcher.search(folder, "total"); // Search for the total3500XXX.arff in files/total/
+		
+		for(int i=0; i<paths.length; i++){ // for each dataset, get evaluation results
+			getEvalResult(paths[i], 6*i);
+		}
+		
+		for(int j=0; j<6; j++){
+			double p0 = 0.0d, 
+					   p1 = 0.0d, 
+					   r0 = 0.0d, 
+					   r1 = 0.0d,
+					   f0 = 0.0d,
+					   f1 = 0.0d,
+					   acc = 0.0d;
+				for(int i=j; i<60; i+=6){	// for each time
+					p0 += results[i][0];
+					r0 += results[i][1];
+					f0 += results[i][2];
+					p1 += results[i][3];
+					r1 += results[i][4];
+					f1 += results[i][5];
+					acc += results[i][6];
+				}
+				
+				//print the average of 10 times
+				System.out.printf("%-15s: %6.3f, %6.3f, %6.3f, %6.3f, %6.3f, %6.3f, %6.3f\n", 
+						classifiers[j], p0*1.0/10.0, r0*1.0/10.0, f0*1.0/10.0, p1*1.0/10.0, r1*1.0/10.0, f1*1.0/10.0, acc*1.0/10.0);
+				
+		}
 	}
 
 }
