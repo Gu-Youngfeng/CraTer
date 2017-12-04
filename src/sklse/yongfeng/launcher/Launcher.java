@@ -21,22 +21,22 @@ public class Launcher {
 				case "-help":
 					messageHELP();
 					break;
-				case "-tota":
+				case "-total":
 					Overall.main(null);
 					break;
-				case "-sing":
+				case "-single":
 					Single.main(null);
 					break;
-				case "-imba":
+				case "-imbalance":
 					ImbalanceProcessingAve.main(null);
 					break;
-				case "-feat":
+				case "-feature":
 					FeatureSelectionAve.main(null);
 					break;
 				case "-rank":
 					FeatureRankingAve.main(null);
 					break;
-				case "-TEN":
+				case "-tenEval":
 					TopTenFeatureEvaluation.main(null);
 					break;
 				default:
@@ -53,16 +53,17 @@ public class Launcher {
 	}
 	
 	public static void messageHELP(){
-		System.out.println("#############################################################\n");
-		System.out.println("PROJECT NAME: WekaEvaluation\n");
-		System.out.println("DESCRIPTION : This project implements the EVALUATION PROCESS in paper [Does the Fault Reside in Stack Trace]\n");
-		System.out.println("USAGE       : -help   Output the information of the project.");
-		System.out.println("            : -tota   Evaluate the total datasets by using [classifiers] + SMOTE.");
-		System.out.println("            : -sing   Evaluate the single project by using [classifiers] + SMOTE");
-		System.out.println("            : -imba   Evaluate the impact of imbalanced data processing methods on the results.");
-		System.out.println("            : -feat   Evaluate the impact of feature selction methods on the results.");
-		System.out.println("            : -rank   Ranking the top-10 feature list of each project.");
-		System.out.println("\n#############################################################\n");
+		System.out.println("\n-------------------------------------------------\n");
+		System.out.println(">> PROJECT NAME: CraTer\n");
+		System.out.println(">> DESCRIPTION : This project implements the EVALUATION PROCESS in paper [Does the Fault Reside in Stack Trace]\n");
+		System.out.println(">> USAGE       : -help       Output the help message of CraTer.");
+		System.out.println("               : -total      Evaluate the total datasets by using [classifiers] + SMOTE.");
+		System.out.println("               : -single     Evaluate the single project by using [classifiers] + SMOTE.");
+		System.out.println("               : -imbalance  Evaluate the impact of imbalanced data processing methods on the results.");
+		System.out.println("               : -feature    Evaluate the impact of feature selction methods on the results.");
+		System.out.println("               : -rank       Rank the top-10 feature list of each project.");
+		System.out.println("               : -tenEval    Evaluate each project only using top-10 features");
+		System.out.println("\n-------------------------------------------------\n");
 	}
 
 }

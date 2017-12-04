@@ -38,11 +38,11 @@ public class Overall {
 		System.out.println("1. Experiment setup");
 		System.out.println("   Classifiers      : C4.5, Random Forest, Bayes Net, SMO, KStar, SVM\n");
 		System.out.println("2. Output format");
-		System.out.println("   [classifier] | precision(inTrace) recall(inTrace) fmeasure(inTrace) precision(outTrace) recall(outTrace) fmeasure(outTrace) Accuracy\n");
+		System.out.println("   [classifier] | precision(inTrace) & recall(inTrace) & fmeasure(inTrace) & precision(outTrace) & recall(outTrace) & fmeasure(outTrace) & Accuracy\n");
 		System.out.println("3. Time Consumption");
 		System.out.println("   It will take about 30 minutes to get the final results.");
 
-		System.out.println("-------------------------------------------------");
+		System.out.println("-------------------------------------------------\n");
 		
 		/** Get average results from 10 datasets (each of which has 3500 crashes).*/			
 		getEvalResultByAve("files/total/");
@@ -56,7 +56,7 @@ public class Overall {
 	 */
 	public static void getEvalResult(String path, int index) throws Exception{
 		
-		System.out.println("\nDealing with [ " + path + " ] ...\n");
+		System.out.println("Dealing with [ " + path + " ] ...\n");
 				
 		Instances ins = DataSource.read(path);
 		int numAttr = ins.numAttributes();
