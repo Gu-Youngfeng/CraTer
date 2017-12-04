@@ -10,14 +10,14 @@ This project is developed in Java 8.0. The additional plugins we used is **WEKA*
 
 Currently, we have only 3 packages at present, i.e., `sklse.yongfeng.data`, which does some data preprocessing work, `sklse.yongfeng.experiments`, which contains the whole experiments processes, and `sklse.yongfeng.launcher`, which provide the main entry of the project.
 
-1.`sklse.yongfeng.data` package includes,
+1. `sklse.yongfeng.data` package includes,
 
 - **FilesSearcher.java** provide different file searchers for searching suitable datasets.
 - **RandomGenerator.java** is used to randomly select/generate crashes from each project.
 - **InsMerge.java** is used to merage individual datasets into one total dataset.
 - **StatisticalProject.java** calculates the statistical information(distribution of **inTrace** and **outTrace** instances) of each dataset.
 
-2.`sklse.yongfeng.experiments` package includes,
+2. `sklse.yongfeng.experiments` package includes,
 
 - **Overall.java** evaluates the prediction approach on the total datasets combined with 7 projects using cross validation.
 - **Single.java** evaluates the prediction approach on each project using cross validation.
@@ -33,20 +33,20 @@ Currently, we have only 3 packages at present, i.e., `sklse.yongfeng.data`, whic
 
 4. `files` folder includes,
 
-- all dataset used in our experiments.
+All dataset used in our experiments.
 
 5. `libs` folder includes,
 
-- all dependency jar files used in our project.
+All dependency jar files used in our project.
 
 6. `CraTer.jar`
 
-- `CraTer.jar` is the core part of the project, we can run it directly on terminate or CMD windows.
+`CraTer.jar` is the core part of the project, we can run it directly on terminate or CMD windows.
 
 ### Usage
 
 There are two main way to run the **CraTer** on your computer, and it's also a easy work to conduct secondary development on **CraTer**.
 
-- Import the **CraTer project** into Eclipse, there is almost main function in every java files. Click `run as Java application` to get the experimental results.
+- Import the **CraTer project** into Eclipse, there is almost a main function in every java file. Click `run as Java application` to get the experimental results.
 
 - Use **CraTer.jar** contained in the project. try to use it on terminate or CMD windows, the commands are quite simple, such as `java -jar CraTer.jar -help` to show the description and help information of the **CraTer** project.
