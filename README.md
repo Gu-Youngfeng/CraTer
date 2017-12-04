@@ -49,4 +49,8 @@ There are two main way to run the **CraTer** on your computer, and it's also a e
 
 - Import the **CraTer project** into Eclipse, there is almost a main function in every java file. Click `run as Java application` to get the experimental results.
 
+![carter-eclipse](img/carter2.jpg)
+
 - Use **CraTer.jar** contained in the project. try to use it on terminate or CMD windows, the commands are quite simple, such as `java -jar CraTer.jar -help` to show the description and help information of the **CraTer** project.
+
+![carter-cmd](img/carter.jpg)
