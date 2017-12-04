@@ -7,14 +7,14 @@ import weka.core.converters.ConverterUtils.DataSource;
 
 /***
  * <p>class <b>RandomGenerator</b> is used to proportional randomly select <b>SIZE</b> instances 
- * from original dataset for <b>N</b> times. And we only choose 1 dataset from the 20 dataset.
- * here is the example of generating N arff of codec.arff, </p>
+ * from original dataset for <b>N</b> times. Here is the example of generating N arff of codec.arff, </p>
  * <pre>
  * INPUT  >> files/codec.arff<br>
- * OUTPUT >> D:/Users/LEE/Desktop/New_Data/codec1.arff, 
- *           D:/Users/LEE/Desktop/New_Data/codec2.arff, ..., 
- *           D:/Users/LEE/Desktop/New_Data/codecN.arff
+ * OUTPUT >> files/generated/codec1.arff, 
+ *           files/generated/codec2.arff, ..., 
+ *           files/generated/codecN.arff
  * </pre>
+ * <p><b>* In our experiments, we use this class to randomly select 10 datasets from each projects.</b></p>
  */
 public class RandomGenerator {
 	
@@ -26,16 +26,14 @@ public class RandomGenerator {
 
 	public static void main(String[] args) throws Exception {
 		
-		String[] paths = {"files/codec.arff",
-				"files/ormlite.arff", "files/jsqlparser.arff", "files/collections.arff",
-				"files/io.arff", "files/jsoup.arff", "files/mango.arff"};
+		String[] paths = {"files/data/codec.arff",
+				"files/data/ormlite.arff", "files/data/jsqlparser.arff", "files/data/collections.arff",
+				"files/data/io.arff", "files/data/jsoup.arff", "files/data/mango.arff"};
 		
 		for(int i=0; i<paths.length; i++){
 			generateProject(paths[i], N, SIZE); // generate one project
 			System.out.printf("%-15s%s%d%s\n", filterName(paths[i]), " has already generated ", N, " arff files!");
-
 		}
-
 	}
 	
 	/***
@@ -68,13 +66,13 @@ public class RandomGenerator {
 		/*** randomize the dataset */
 		data.randomize(new Random(rand));
 		
-		/*** instances in InTrace class */
-		Instances dataIn = DataSource.read("files\\in.arff");
-		dataIn.setClassIndex(data.numAttributes()-1);
+		/*** dataIn to save instances of InTrace class */
+		Instances dataIn = new Instances("dataIn", InsMerge.getStandAttrs(), 1);
+		dataIn.setClassIndex(dataIn.numAttributes() - 1);
 
-		/*** instances in OutTrace class */
-		Instances dataOut = DataSource.read("files\\out.arff");
-		dataOut.setClassIndex(data.numAttributes()-1);
+		/*** dataOut to save instances of OutTrace class */
+		Instances dataOut = new Instances("dataOut", InsMerge.getStandAttrs(), 1);
+		dataIn.setClassIndex(dataIn.numAttributes() - 1);
 		
 		/*** add OutTrace instances into dataOut */
 		for(int i=0; i<data.numInstances(); i++){
@@ -83,7 +81,7 @@ public class RandomGenerator {
 			}
 		}
 		
-		/** add InTrace instances into dataIn*/
+		/** add InTrace instances into dataIn */
 		for(int i=0; i<data.numInstances(); i++){
 			if(data.get(i).stringValue(data.get(i).classAttribute()).equals("InTrace")){
 				dataIn.add(data.get(i));
@@ -100,20 +98,21 @@ public class RandomGenerator {
 		int outtrace = num - intrace;
 		
 		/** create new generated dataset train*/
-		Instances train = DataSource.read("files\\r200.arff");
+		Instances train = new Instances("dataIn", InsMerge.getStandAttrs(), 1);
+		train.setClassIndex(train.numAttributes() - 1);
 	
-		/** train get X from dataIn*/
+		/** train get X instances from dataIn*/
 		for(int i=0; i<intrace; i++){
 			train.add(dataIn.get(i));
 		}
 		
-		/** train get Y from dataOut*/
+		/** train get Y instances from dataOut*/
 		for(int j=0; j<outtrace; j++){
 			train.add(dataOut.get(j));
 		}
 		
 		/** save the dataset in path, we save the arff into D:/Users/LEE/Desktop/New_Data/XXX.arff */
-		String filename = "D:/Users/LEE/Desktop/New_Data/" + filterName(path) + rand + ".arff";
+		String filename = "files/generated/" + filterName(path) + rand + ".arff";
 		DataSink.write(filename, train);
 
 	}

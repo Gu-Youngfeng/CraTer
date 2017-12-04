@@ -4,70 +4,51 @@ import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 
 /***
- * <p>This class <b>StatisticalProject</b> is used to statistic the distribution of 500 crashes in each project.</p>
+ * <p>This class <b>StatisticalProject</b> is used to get the information of the distribution
+ *  in each dataset.</p>
  *
+ * <p><b>* In our experiment, this class is used to calculate the distribution information of InTrace and OutTrace in each dataset.</b></p>
  */
 public class StatisticalProject {
 	
-	private static String[] inssName = {"Codec", "Ormlite-core", "JSqlparser", "Collections", "IO", "Jsoup", "Mango"};
-		
-	private static Instances dataCodec;
-	private static Instances dataOrm;
-	private static Instances dataJsql;
-	private static Instances dataCol;
-	private static Instances dataIO;
-	private static Instances dataJso;
-	private static Instances dataMan;
-
+	/**NOTE: This main function is only used for testing the function getDist(path)*/
 	public static void main(String[] args) throws Exception {
 
-		/** load dataset*/
-		dataCodec = DataSource.read("files\\codec500.arff");
-		dataOrm = DataSource.read("files\\ormlite500.arff"); // Jsi -> Ormlite
-		dataJsql = DataSource.read("files\\jsqlparser500.arff");
-		dataCol = DataSource.read("files\\collections500.arff");
-		dataIO = DataSource.read("files\\io500.arff");
-		dataJso = DataSource.read("files\\jsoup500.arff");
-		dataMan = DataSource.read("files\\mango500.arff");
+		System.out.println("-----  Distribution Information in dataset  -----\n");
 		
-		/** set class index*/
-		dataCodec.setClassIndex(dataCodec.numAttributes()-1);
-		dataOrm.setClassIndex(dataOrm.numAttributes()-1);
-		dataJsql.setClassIndex(dataJsql.numAttributes()-1);
-		dataCol.setClassIndex(dataCol.numAttributes()-1);
-		dataIO.setClassIndex(dataIO.numAttributes()-1);
-		dataJso.setClassIndex(dataJso.numAttributes()-1);
-		dataMan.setClassIndex(dataMan.numAttributes()-1);
+		String[] path = {"files/codec500.arff",
+				"files/ormlite500.arff", "files/jsqlparser500.arff", "files/collections500.arff",
+				"files/io500.arff", "files/jsoup500.arff", "files/mango500.arff"};
 		
-		Instances[] inss = {dataCodec, dataOrm, dataJsql, dataCol, dataIO, dataJso, dataMan};
-		
-		System.out.println("-----  Distribution Information of 500 selected crashes in each Project  -----\n");
-		
-		for(int i=0; i<inss.length; i++){
+		for(int i=0; i<path.length; i++){
 
-			System.out.printf("%-15s ", inssName[i]);
-			statistic(inss[i]);
+			getDist(path[i]);
 		}
 
 	}
 
 	/**
-	 * <p>To get the inTrace and outTrace data in 500 crashes in each project.</p>
+	 * <p>To get the distribution of inTrace and outTrace instance in given dataset in <b>path</b>.</p>
 	 * @param ins Instances of each project
+	 * @throws Exception 
 	 */
-	public static void statistic(Instances ins){
-		int len = ins.numInstances();
+	public static void getDist(String path) throws Exception{
+		
+		Instances ins = DataSource.read(path);
+		int numAttr = ins.numAttributes();
+		ins.setClassIndex(numAttr-1);
+		
+		int numIns = ins.numInstances();
 		int intrace = 0;
 		int outtrace = 0;
-		for(int i=0; i<len; i++){
+		for(int i=0; i<numIns; i++){
 			if(ins.get(i).stringValue(ins.attribute(ins.classIndex())).equals("InTrace")){
 				intrace++;
-			}else{
-				
+			}else{	
 				outtrace++;
 			}
 		}
-
-		System.out.printf("inTrace:%4d, outTrace:%4d.", intrace, outtrace);
+		
+		System.out.printf("[ %-30s ] inTrace:%4d, outTrace:%4d.\n", path, intrace, outtrace);
 	}
 }
