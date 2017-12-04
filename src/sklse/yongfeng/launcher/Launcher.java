@@ -40,15 +40,15 @@ public class Launcher {
 					TopTenFeatureEvaluation.main(null);
 					break;
 				default:
-					System.out.println("[ERROR!] >> WrongCommandError! Try to use command: [java jar WekaEvaluation.jar -help] ");
+					System.out.println("[ERROR!] >> WrongCommandError! Try to use command: [java -jar WekaEvaluation.jar -help] ");
 					break;
 				}
 				
 			}else{
-				System.out.println("[ERROR!] >> CommandNotFoundError! Try to use command: [java jar WekaEvaluation.jar -help] ");
+				System.out.println("[ERROR!] >> CommandNotFoundError! Try to use command: [java -jar WekaEvaluation.jar -help] ");
 			}
 		}catch(Exception e){
-			System.out.println("[ERROR!] >> DatasetNotFoundError! Please make sure that the jar is in the root directory of WekaEvaluation project.");
+			System.out.println("[ERROR!] >> DatasetNotFoundError! Please make sure that the -jar is in the root directory of WekaEvaluation project.");
 		}
 	}
 	
