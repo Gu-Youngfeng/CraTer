@@ -1,29 +1,52 @@
-## WekaEvaluation
-This project implements the <b>evaluation process</b> in paper "Does the Fault Reside in the Stack Trace". 
+# CraTer
+
+[CraTer](https://github.com/Gu-Youngfeng/CraTer) is an open-source Java tool which implements the **evaluation process** in paper "Does the Fault Reside in Stack Trace". It takes the datasets (arff format) extracted from other Java projects as input, and outputs the evalution results of the prediction approach proposed in the paper. 
 
 ### Environment
-This project is developed in Java 8.0. The additional plugins we used is <b>WEKA</b>, whose jar can be downloaded in the Maven Repository
-<a href="http://mvnrepository.com/artifact/nz.ac.waikato.cms.weka/weka-stable">[Weka Stable]</a>.
 
-### Package
-Currently, we have only 2 packages at present, i.e., <code>sklse.yongfeng.data</code>, which does some data generation and merging work, and <code>sklse.yongfeng.experiments</code>, which conducts the experiments of 10-folds cross validation, feature selection, and imbalanced data processing.
+This project is developed in Java 8.0. The additional plugins we used is **WEKA**, whose jar can be downloaded in the Maven Repository [Weka Stable](http://mvnrepository.com/artifact/nz.ac.waikato.cms.weka/weka-stable).
 
-1.<code>sklse.yongfeng.data</code> package include,
-<ul>
-  <li><b>FilesSearcher.java</b> is used to search arff files under the given directory.</li>
-  <li><b>InsMerge.java</b> is used to merage individual datasets into one total dataset.</li>
-  <li><b>RandomGenerator.java</b> is used to randomly select/generate crashes from each project.</li>
-  <li><b>StatisticalProject.java</b> is used to provide the statistical information of each project.</li>
-</ul>
+### Construction
 
-2.<code>sklse.yongfeng.experiments</code> package include,
-<ul>
-  <li><b>Overall.java</b> is used to conduct 10-fold cross validation on whole dataset.</li>
-  <li><b>Single.java</b> is used to conduct 10-fold cross validation on each individual dataset.</li>
-  <li><b>ImbalanceProcessing.java</b> is used to conduct contrast experiment between using imbalanced data processing methods and No strategy.</li>
-  <li><b>FeatureSelection.java</b> is used to conduct contrast experiment between using feature selection methods and No strategy.</li>
-  <li><b>FoldResults.java</b> is used to get each fold result in cross validation, and the results will be used in the Wilcoxon signed-rank test.</li>
-</ul>
+Currently, we have only 3 packages at present, i.e., `sklse.yongfeng.data`, which does some data preprocessing work, `sklse.yongfeng.experiments`, which contains the whole experiments processes, and `sklse.yongfeng.launcher`, which provide the main entry of the project.
+
+1. `sklse.yongfeng.data` package includes,
+
+- **FilesSearcher.java** provide different file searchers for searching suitable datasets.
+- **RandomGenerator.java** is used to randomly select/generate crashes from each project.
+- **InsMerge.java** is used to merage individual datasets into one total dataset.
+- **StatisticalProject.java** calculates the statistical information(distribution of **inTrace** and **outTrace** instances) of each dataset.
+
+2. `sklse.yongfeng.experiments` package includes,
+
+- **Overall.java** evaluates the prediction approach on the total datasets combined with 7 projects using cross validation.
+- **Single.java** evaluates the prediction approach on each project using cross validation.
+- **ImbalanceProcessingAve.java** conducts the contrast experiment between using imbalanced data processing methods and No strategy.
+- **FeatureSelectionAve.java** conducts the contrast experiment between using feature selection methods and No strategy.
+- **FeatureRankingAve.java** ranks the features by Pearson's Correlation, then output the top-10 feature list of each project.
+- **TopTenFeatureEvaluation.java** evaluate the prediction approach on the each project using only top-10 features.
+- **FoldResultsAve.java** is used to get each fold result in cross validation, and the results will be used in the Wilcoxon signed-rank test.
+
+3. `sklse.yongfeng.launcher` package includes,
+
+- **Launcher.java** provides the main entry of the project.
+
+4. `files` folder includes,
+
+All dataset used in our experiments.
+
+5. `libs` folder includes,
+
+All dependency jar files used in our project.
+
+6. `CraTer.jar`
+
+`CraTer.jar` is the core part of the project, we can run it directly on terminate or CMD windows.
 
 ### Usage
-There is a main function in almost every Java class, so it's easy to click "run" buttom to execution the project in eclipse.
+
+There are two main way to run the **CraTer** on your computer, and it's also a easy work to conduct secondary development on **CraTer**.
+
+- Import the **CraTer project** into Eclipse, there is almost a main function in every java file. Click `run as Java application` to get the experimental results.
+
+- Use **CraTer.jar** contained in the project. try to use it on terminate or CMD windows, the commands are quite simple, such as `java -jar CraTer.jar -help` to show the description and help information of the **CraTer** project.
