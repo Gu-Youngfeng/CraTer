@@ -33,15 +33,15 @@ Currently, we have only 3 packages at present, i.e., `sklse.yongfeng.data`, whic
 
 `files` folder includes,
 
-All dataset used in our experiments.
+- All dataset used in our experiments.
 
 `libs` folder includes,
 
-All dependency jar files used in our project.
+- All dependency jar files used in our project.
 
 `CraTer.jar`
 
-`CraTer.jar` is the core part of the project, we can run it directly on terminate or CMD windows.
+- `CraTer.jar` is the core part of the project, we can run it directly on terminate or CMD windows.
 
 ### 3. Usage
 
