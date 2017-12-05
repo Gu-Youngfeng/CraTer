@@ -8,7 +8,7 @@ This project is developed in Java 8.0. The additional plugins we used is **WEKA*
 
 ## 2. Construction
 
-Currently, we have only 3 packages at present, i.e., `sklse.yongfeng.data`, which does some data preprocessing work, `sklse.yongfeng.experiments`, which contains the whole experiments processes, and `sklse.yongfeng.launcher`, which provide the main entry of the project.
+Currently, we have only three packages at present, i.e., `sklse.yongfeng.data`, which does some data preprocessing work, `sklse.yongfeng.experiments`, which contains the whole experiments processes, and `sklse.yongfeng.launcher`, which provide the main entry of the project.
 
 `sklse.yongfeng.data` package includes,
 
@@ -31,26 +31,16 @@ Currently, we have only 3 packages at present, i.e., `sklse.yongfeng.data`, whic
 
 - **Launcher.java** provides the main entry of the project.
 
-`files` folder includes,
-
-- All dataset used in our experiments.
-
-`libs` folder includes,
-
-- All dependency jar files used in our project.
-
-`CraTer.jar`
-
-- `CraTer.jar` is the core part of the project, we can run it directly on terminate or CMD windows.
+Beside the packages presented above, the `CraTer.jar` is the core part of the project, we can run it directly on terminate or CMD windows. What'more, `libs` folder includes all dependency jar files used in our project.`files` folder includes all dataset used in our experiments.
 
 ## 3. Usage
 
 There are two main way to run the **CraTer** on your computer, and it's also a easy work to conduct secondary development on **CraTer**.
 
-Import the **CraTer project** into Eclipse, there is almost a main function in every java file. Click `run as Java application` to get the experimental results. For example, if we set the arguments of run configuration to `-help`, we will see,
+**[Method 1]**: Import the **CraTer project** into Eclipse, there is almost a main function in every java file. Click `run as Java application` to get the experimental results. For example, if we set the arguments of run configuration to `-help`, we will see,
 
 ![carter-eclipse](img/carter2.jpg)
 
-Use the **CraTer.jar** contained in the project. try to use it on terminate or CMD windows. The commands are quite simple, for example, try to type `java -jar CraTer.jar -help` on CMD windows to show the description and help information of the **CraTer** project.
+**[Method 2]**: Use the **CraTer.jar** contained in the project. try to use it on terminate or CMD windows. The commands are quite simple, for example, try to type `java -jar CraTer.jar -help` on CMD windows to show the description and help information of the **CraTer** project.
 
 ![carter-cmd](img/carter.jpg)
