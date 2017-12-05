@@ -2,11 +2,11 @@
 
 [CraTer](https://github.com/Gu-Youngfeng/CraTer) is an open-source Java tool which implements the **evaluation process** in paper "Does the Fault Reside in Stack Trace". It takes the datasets (arff format) extracted from other Java projects as input, and outputs the evalution results of the prediction approach proposed in the paper. 
 
-### 1. Environment
+## 1. Environment
 
 This project is developed in Java 8.0. The additional plugins we used is **WEKA**, whose jar can be downloaded in the Maven Repository [Weka Stable](http://mvnrepository.com/artifact/nz.ac.waikato.cms.weka/weka-stable).
 
-### 2. Construction
+## 2. Construction
 
 Currently, we have only 3 packages at present, i.e., `sklse.yongfeng.data`, which does some data preprocessing work, `sklse.yongfeng.experiments`, which contains the whole experiments processes, and `sklse.yongfeng.launcher`, which provide the main entry of the project.
 
@@ -43,14 +43,14 @@ Currently, we have only 3 packages at present, i.e., `sklse.yongfeng.data`, whic
 
 - `CraTer.jar` is the core part of the project, we can run it directly on terminate or CMD windows.
 
-### 3. Usage
+## 3. Usage
 
 There are two main way to run the **CraTer** on your computer, and it's also a easy work to conduct secondary development on **CraTer**.
 
-- Import the **CraTer project** into Eclipse, there is almost a main function in every java file. Click `run as Java application` to get the experimental results. For example, if we set the arguments of run configuration to `-help`, we will see,
+Import the **CraTer project** into Eclipse, there is almost a main function in every java file. Click `run as Java application` to get the experimental results. For example, if we set the arguments of run configuration to `-help`, we will see,
 
 ![carter-eclipse](img/carter2.jpg)
 
-- Use **CraTer.jar** contained in the project. try to use it on terminate or CMD windows. The commands are quite simple, for example, try to type `java -jar CraTer.jar -help` on CMD windows to show the description and help information of the **CraTer** project.
+Use the **CraTer.jar** contained in the project. try to use it on terminate or CMD windows. The commands are quite simple, for example, try to type `java -jar CraTer.jar -help` on CMD windows to show the description and help information of the **CraTer** project.
 
 ![carter-cmd](img/carter.jpg)
