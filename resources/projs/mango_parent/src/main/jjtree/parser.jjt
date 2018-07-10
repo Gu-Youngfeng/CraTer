@@ -1,0 +1,414 @@
+options
+{
+    /** 使用jdk1.6 */
+    JDK_VERSION = "1.6";
+
+    /** 生成非静态方法 */
+    static = false;
+
+    /** 标记开始token与结束token */
+    TRACK_TOKENS=true;
+
+    /** 让jjtree给每个非终结符生成一个对象 */
+    MULTI = true;
+
+    /** 开启访问者模式 */
+    VISITOR = true;
+
+    /** 忽略大小写 */
+    IGNORE_CASE = true;
+
+}
+
+PARSER_BEGIN(Parser)
+package org.jfaster.mango.parser;
+
+import java.io.StringReader;
+import java.io.Reader;
+
+public class Parser {
+    public Parser(String s) {
+        this((Reader)(new StringReader(s)));
+    }
+}
+PARSER_END(Parser)
+
+
+TOKEN:
+{
+        <#COLON : ":" >
+    |   <#NUMBER : ["1"-"9"] (["0"-"9"])* >
+    |   <#DOT : "." >
+    |   <#FIELD : ["a"-"z","_"] (["a"-"z","_", "0"-"9"])* >
+    |   <#JDBC_TYPE : (["a"-"z"])+ >
+    |   <#WHITESPACE : (" ")* >
+}
+
+<DEFAULT>
+TOKEN:
+{
+        <BLANK : (" ")+ >
+    |   <QUOTE_TEXT: "'" (~["'"])* "'" >
+    |   <JDBC_ITERABLE_PARAMETER: "in" <WHITESPACE> "(" <WHITESPACE> <PARAMETER> ("@" <JDBC_TYPE>)? <WHITESPACE> ")"  >
+    |   <JDBC_PARAMETER: <PARAMETER> ("@" <JDBC_TYPE>)? >
+    |   <GLOBAL_TABLE: "#table" >
+    |   <JOIN_PARAMETER: "#{" <WHITESPACE> <PARAMETER> <WHITESPACE> "}" >
+    |   <IF_DIRECTIVE: "#if" > {SwitchTo(EXPRESSION);}
+    |   <ELSEIF_DIRECTIVE: "#elseif" > {SwitchTo(EXPRESSION);}
+    |   <ELSE_DIRECTIVE: "#else" >
+    |   <END: "#end" >
+    |   <INSERT: "insert" >
+    |   <DELETE: "delete" >
+    |   <UPDATE: "update" >
+    |   <SELECT: "select" >
+    |   <REPLACE: "replace" >
+    |   <MERGE: "merge" >
+    |   <TRUNCATE: "truncate" >
+    |   <TEXT: (~[":", "#", " ", "'"])+ >
+}
+
+<EXPRESSION>
+SKIP :
+{
+        " "
+}
+
+<EXPRESSION>
+TOKEN:
+{
+        <LOGICAL_AND: "&&" | "and" >
+    |   <LOGICAL_OR: "||" | "or" >
+    |   <LOGICAL_LT: "<" | "lt" >
+    |   <LOGICAL_LE: "<=" | "le" >
+    |   <LOGICAL_GT: ">" | "gt" >
+    |   <LOGICAL_GE: ">=" | "ge" >
+    |   <LOGICAL_EQ: "==" | "eq" >
+    |   <LOGICAL_NE: "!=" | "ne" >
+    |   <LOGICAL_NOT: "!" | "not" >
+    |   <INTEGER_LITERAL: ("-")? (["0"-"9"])+ >
+    |   <STRING_LITERAL: "'" (~["'"])* "'" >
+    |   <TRUE: "true" >
+    |   <FALSE: "false" >
+    |   <NULL: "null" >
+    |   <LPAREN : "(" >
+    |   <RPAREN : ")" > {SwitchTo(DEFAULT);}
+}
+
+<DEFAULT, EXPRESSION>
+TOKEN:
+{
+    <PARAMETER : <COLON> (<NUMBER>|<FIELD>) (<DOT> <FIELD>)* >
+}
+
+
+ASTRootNode parse()  #RootNode : {}
+{
+    DML() ( Statement() )+ #Block <EOF>
+    {
+        return jjtThis;
+    }
+}
+
+void DML() #void : {}
+{
+    Insert() | Delete() | Update() | Select() | Replace() | Merge() | Truncate()
+}
+
+
+void Insert() :
+{
+    Token t;
+}
+{
+    t=<INSERT>
+    {
+        jjtThis.setValue(t.image);
+    }
+}
+
+void Delete() :
+{
+    Token t;
+}
+{
+    t=<DELETE>
+    {
+        jjtThis.setValue(t.image);
+    }
+}
+
+void Update() :
+{
+    Token t;
+}
+{
+    t=<UPDATE>
+    {
+        jjtThis.setValue(t.image);
+    }
+}
+
+void Select() :
+{
+    Token t;
+}
+{
+    t=<SELECT>
+    {
+        jjtThis.setValue(t.image);
+    }
+}
+
+void Replace() :
+{
+    Token t;
+}
+{
+    t=<REPLACE>
+    {
+        jjtThis.setValue(t.image);
+    }
+}
+
+void Merge() :
+{
+    Token t;
+}
+{
+    t=<MERGE>
+    {
+        jjtThis.setValue(t.image);
+    }
+}
+
+void Truncate() :
+{
+    Token t;
+}
+{
+    t=<TRUNCATE>
+    {
+        jjtThis.setValue(t.image);
+    }
+}
+
+void Statement() #void : {}
+{
+        JDBCParameter()
+    |   JDBCIterableParameter()
+    |   GlobalTable()
+    |   JoinParameter()
+    |   IfStatement()
+    |   QuoteText()
+    |   Text()
+    |   Blank()
+}
+
+void JDBCParameter() :
+{
+    Token t;
+}
+{
+    t=<JDBC_PARAMETER>
+    {
+        jjtThis.init(t.image);
+    }
+}
+
+void JDBCIterableParameter() :
+{
+    Token t;
+}
+{
+    t=<JDBC_ITERABLE_PARAMETER>
+    {
+        jjtThis.init(t.image);
+    }
+}
+
+void GlobalTable() :
+{}
+{
+    <GLOBAL_TABLE>
+}
+
+void JoinParameter() :
+{
+    Token t;
+}
+{
+    t=<JOIN_PARAMETER>
+    {
+        jjtThis.init(t.image);
+    }
+}
+
+void QuoteText() :
+{
+    Token t;
+}
+{
+    t=<QUOTE_TEXT>
+    {
+        jjtThis.setValue(t.image);
+    }
+}
+
+void Text() :
+{
+    Token t;
+}
+{
+    ( t=<TEXT> | t=<INSERT> | t=<DELETE> | t=<UPDATE> | t=<SELECT> | t=<REPLACE> | t=<MERGE> | t=<TRUNCATE> )
+    {
+        jjtThis.setValue(t.image);
+    }
+}
+
+void Blank() :
+{
+    Token t;
+}
+{
+    t=<BLANK>
+    {
+        jjtThis.setValue(t.image);
+    }
+}
+
+void IfStatement() :
+{}
+{
+    <IF_DIRECTIVE> <LPAREN> Expression() <RPAREN>
+        ( Statement() )* #Block
+    [ ( ElseIfStatement() )+ ]
+    [ ElseStatement() ]
+    <END>
+}
+
+void ElseStatement() :
+{}
+{
+    <ELSE_DIRECTIVE>
+        ( Statement() )* #Block
+}
+
+void ElseIfStatement() :
+{}
+{
+    <ELSEIF_DIRECTIVE> <LPAREN> Expression() <RPAREN>
+        ( Statement() )* #Block
+}
+
+void Expression() :
+{}
+{
+    ConditionalOrExpression()
+}
+
+void ConditionalOrExpression() #void :
+{}
+{
+      ConditionalAndExpression()
+      (  <LOGICAL_OR>  ConditionalAndExpression() #OrNode(2) )*
+}
+
+
+void ConditionalAndExpression() #void :
+{}
+{
+      RelationalExpression()
+      ( <LOGICAL_AND> RelationalExpression() #AndNode(2) )*
+}
+
+void RelationalExpression() #void :
+{}
+{
+    UnaryExpression()
+    (
+            <LOGICAL_LT>    UnaryExpression()   #LTNode(2)
+        |   <LOGICAL_GT>    UnaryExpression()   #GTNode(2)
+        |   <LOGICAL_LE>    UnaryExpression()   #LENode(2)
+        |   <LOGICAL_GE>    UnaryExpression()   #GENode(2)
+        |   <LOGICAL_EQ>    UnaryExpression()   #EQNode(2)
+        |   <LOGICAL_NE>    UnaryExpression()   #NENode(2)
+    )*
+}
+
+void UnaryExpression() #void :
+{}
+{
+        <LOGICAL_NOT>  UnaryExpression() #NotNode(1)
+    |   PrimaryExpression()
+}
+
+void PrimaryExpression() #void :
+{}
+{
+        ExpressionParameter()
+    |   IntegerLiteral()
+    |   StringLiteral()
+    |   True()
+    |   False()
+    |   Null()
+}
+
+void ExpressionParameter() :
+{
+    Token t;
+}
+{
+    t=<PARAMETER>
+    {
+        jjtThis.init(t.image);
+    }
+}
+
+void IntegerLiteral() :
+{
+    Token t;
+}
+{
+    t=<INTEGER_LITERAL>
+    {
+        jjtThis.init(t.image);
+    }
+}
+
+void StringLiteral() :
+{
+    Token t;
+}
+{
+    t=<STRING_LITERAL>
+    {
+        jjtThis.init(t.image);
+    }
+}
+
+void True() :
+{}
+{
+    <TRUE>
+}
+
+void False() :
+{}
+{
+    <FALSE>
+}
+
+void Null() :
+{}
+{
+    <NULL>
+}
+
+
+
+
+
+
+
+
+

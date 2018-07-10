@@ -6,6 +6,7 @@ import sklse.yongfeng.experiments.ImbalanceProcessingAve;
 import sklse.yongfeng.experiments.Overall;
 import sklse.yongfeng.experiments.Single;
 import sklse.yongfeng.experiments.TopTenFeatureEvaluation;
+import sklse.yongfeng.analysis.Analysis;
 
 /***
  * <p>This is the main launcher of the project.</p>
@@ -20,6 +21,9 @@ public class Launcher {
 				switch(args[0]){
 				case "-help":
 					messageHELP();
+					break;
+				case "-analysis":
+					Analysis.main(null);
 					break;
 				case "-total":
 					Overall.main(null);
@@ -58,6 +62,7 @@ public class Launcher {
 		System.out.println(">> DESCRIPTION : This project implements the EVALUATION PROCESS in paper [Does the fault reside in stack trace]. ");
 		System.out.println("   The latest versions is updated on github [https://github.com/Gu-Youngfeng/CraTer].\n");
 		System.out.println(">> USAGE       : -help       Output the help message of CraTer.");
+		System.out.println("               : -analysis   Conduct static analysis of 7 projects.");
 		System.out.println("               : -total      Evaluate the total datasets combined with 7 projects.");
 		System.out.println("               : -single     Evaluate the datasets from each project.");
 		System.out.println("               : -imbalance  Evaluate the impact of imbalanced data processing methods on the prediction results.");
