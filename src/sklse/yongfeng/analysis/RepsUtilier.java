@@ -9,9 +9,13 @@ import java.util.List;
 public class RepsUtilier {
 	
 	public static void main(String[] args) throws Exception {
-		List<CrashNode> lsCrash = getSingleCrash("src/main/resources/crashrep/collection_mutants.txt");
+		List<CrashNode> lsCrash = getSingleCrash("resources/crashrep/jsoup_mutants.txt");
 		for(CrashNode crash: lsCrash){
-			crash.showBasicInfo();
+//			crash.showBasicInfo();
+			if (crash.InTrace > 1 && crash.InTrace < crash.getLOC()){
+				crash.showBasicInfo();
+				System.out.println(crash.InTrace);
+			}
 		}
 //		getFeatures("src/main/resources/crashrep/io_mutants.txt", "src/main/resources/projs/Commons-io-2.5_parent/");
 //						
