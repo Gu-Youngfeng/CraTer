@@ -1,0 +1,193 @@
+
+--- org.apache.commons.lang3.StringUtilsTest::testJoin_ArrayChar
+java.lang.NullPointerException
+	at org.apache.commons.lang3.StringUtils.join(StringUtils.java:3298)
+	at org.apache.commons.lang3.StringUtilsTest.testJoin_ArrayChar(StringUtilsTest.java:209)
+MUTATIONID:<<org.apache.commons.lang3.StringUtils,join,3298>>
+
+
+--- org.apache.commons.lang3.math.NumberUtilsTest::testCreateNumber
+java.lang.NumberFormatException: 2. is not a valid number.
+	at org.apache.commons.lang3.math.NumberUtils.createNumber(NumberUtils.java:546)
+	at org.apache.commons.lang3.math.NumberUtilsTest.testCreateNumber(NumberUtilsTest.java:213)
+MUTATIONID:<<org.apache.commons.lang3.math.NumberUtils,createNumber,491>>
+
+
+--- org.apache.commons.lang3.math.NumberUtilsTest::TestLang747
+java.lang.NumberFormatException: For input string: "80000000"
+	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+	at java.lang.Integer.parseInt(Integer.java:495)
+	at java.lang.Integer.valueOf(Integer.java:556)
+	at java.lang.Integer.decode(Integer.java:984)
+	at org.apache.commons.lang3.math.NumberUtils.createInteger(NumberUtils.java:684)
+	at org.apache.commons.lang3.math.NumberUtils.createNumber(NumberUtils.java:474)
+	at org.apache.commons.lang3.math.NumberUtilsTest.TestLang747(NumberUtilsTest.java:256)
+MUTATIONID:<<org.apache.commons.lang3.math.NumberUtils,createNumber,468>>
+
+
+--- org.apache.commons.lang.time.FastDateFormatTest::testLang303
+org.apache.commons.lang.SerializationException: java.io.NotSerializableException: org.apache.commons.lang.time.FastDateFormat$PaddedNumberField
+	at org.apache.commons.lang.SerializationUtils.serialize(SerializationUtils.java:111)
+	at org.apache.commons.lang.SerializationUtils.serialize(SerializationUtils.java:133)
+	at org.apache.commons.lang.time.FastDateFormatTest.testLang303(FastDateFormatTest.java:288)
+MUTATIONID:<<org.apache.commons.lang.time.FastDateFormat,<clinit>,140>>
+
+
+--- org.apache.commons.lang3.math.NumberUtilsTest::testCreateNumber
+java.lang.NumberFormatException: 0Xfade is not a valid number.
+	at org.apache.commons.lang3.math.NumberUtils.createNumber(NumberUtils.java:545)
+	at org.apache.commons.lang3.math.NumberUtilsTest.testCreateNumber(NumberUtilsTest.java:197)
+MUTATIONID:<<org.apache.commons.lang3.math.NumberUtils,createNumber,458>>
+
+
+--- org.apache.commons.lang3.RandomStringUtilsTest::testExceptions
+java.lang.ArrayIndexOutOfBoundsException: 879074136
+	at org.apache.commons.lang3.RandomStringUtils.random(RandomStringUtils.java:248)
+	at org.apache.commons.lang3.RandomStringUtils.random(RandomStringUtils.java:321)
+	at org.apache.commons.lang3.RandomStringUtilsTest.testExceptions(RandomStringUtilsTest.java:148)
+MUTATIONID:<<org.apache.commons.lang3.RandomStringUtils,random, 230>>
+
+
+--- org.apache.commons.lang.BooleanUtilsTest::test_toBoolean_String
+java.lang.StringIndexOutOfBoundsException: String index out of range: 3
+	at java.lang.String.charAt(String.java:658)
+	at org.apache.commons.lang.BooleanUtils.toBoolean(BooleanUtils.java:686)
+	at org.apache.commons.lang.BooleanUtilsTest.test_toBoolean_String(BooleanUtilsTest.java:334)
+MUTATIONID:<<org.apache.commons.lang.BooleanUtils,toBoolean,682>>
+
+
+--- org.apache.commons.lang3.StringUtilsTest::testReplace_StringStringArrayStringArray
+java.lang.NullPointerException
+	at org.apache.commons.lang3.StringUtils.replaceEach(StringUtils.java:3676)
+	at org.apache.commons.lang3.StringUtils.replaceEach(StringUtils.java:3502)
+	at org.apache.commons.lang3.StringUtilsTest.testReplace_StringStringArrayStringArray(StringUtilsTest.java:1039)
+MUTATIONID:<<org.apache.commons.lang3.StringUtils,replaceEach,3676>>
+
+
+--- org.apache.commons.lang.LocaleUtilsTest::testLang328
+java.lang.IllegalArgumentException: Invalid locale format: fr__POSIX
+	at org.apache.commons.lang.LocaleUtils.toLocale(LocaleUtils.java:116)
+	at org.apache.commons.lang.LocaleUtilsTest.assertValidToLocale(LocaleUtilsTest.java:140)
+	at org.apache.commons.lang.LocaleUtilsTest.testLang328(LocaleUtilsTest.java:505)
+MUTATIONID:<<org.apache.commons.lang.LocaleUtils,toLocale,113>>
+
+
+--- org.apache.commons.lang3.SerializationUtilsTest::testPrimitiveTypeClassSerialization
+org.apache.commons.lang3.SerializationException: ClassNotFoundException while reading cloned object data
+	at org.apache.commons.lang3.SerializationUtils.clone(SerializationUtils.java:99)
+	at org.apache.commons.lang3.SerializationUtilsTest.testPrimitiveTypeClassSerialization(SerializationUtilsTest.java:373)
+MUTATIONID:<<org.apache.commons.lang3.SerializationUtils,resolveClass,268>>
+
+
+--- org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs
+java.lang.StringIndexOutOfBoundsException: String index out of range: 2
+	at java.lang.String.charAt(String.java:658)
+	at java.lang.Character.codePointAt(Character.java:4668)
+	at org.apache.commons.lang3.text.translate.CharSequenceTranslator.translate(CharSequenceTranslator.java:95)
+	at org.apache.commons.lang3.text.translate.CharSequenceTranslator.translate(CharSequenceTranslator.java:59)
+	at org.apache.commons.lang3.StringEscapeUtils.escapeCsv(StringEscapeUtils.java:556)
+	at org.apache.commons.lang3.StringUtilsTest.testEscapeSurrogatePairs(StringUtilsTest.java:2187)
+MUTATIONID:<<org.apache.commons.lang3.text.translate.CharSequenceTranslator,translate,95>>
+
+
+--- org.apache.commons.lang3.text.translate.NumericEntityUnescaperTest::testUnfinishedEntity
+java.lang.StringIndexOutOfBoundsException: String index out of range: 19
+	at java.lang.String.charAt(String.java:658)
+	at org.apache.commons.lang3.text.translate.NumericEntityUnescaper.translate(NumericEntityUnescaper.java:54)
+	at org.apache.commons.lang3.text.translate.CharSequenceTranslator.translate(CharSequenceTranslator.java:86)
+	at org.apache.commons.lang3.text.translate.CharSequenceTranslator.translate(CharSequenceTranslator.java:59)
+	at org.apache.commons.lang3.text.translate.NumericEntityUnescaperTest.testUnfinishedEntity(NumericEntityUnescaperTest.java:51)
+MUTATIONID:<<org.apache.commons.lang3.text.translate.NumericEntityUnescaper,translate,40>>
+
+
+--- org.apache.commons.lang.LocaleUtilsTest::testAvailableLocaleSet
+java.lang.NullPointerException
+	at org.apache.commons.lang.LocaleUtils.isAvailableLocale(LocaleUtils.java:223)
+	at org.apache.commons.lang.LocaleUtilsTest.setUp(LocaleUtilsTest.java:82)
+MUTATIONID:<<org.apache.commons.lang.LocaleUtils,isAvailableLocale,223>>
+
+
+--- org.apache.commons.lang.text.StrBuilderAppendInsertTest::testLang299
+java.lang.ArrayIndexOutOfBoundsException
+	at java.lang.String.getChars(String.java:826)
+	at org.apache.commons.lang.text.StrBuilder.appendFixedWidthPadRight(StrBuilder.java:884)
+	at org.apache.commons.lang.text.StrBuilderAppendInsertTest.testLang299(StrBuilderAppendInsertTest.java:602)
+MUTATIONID:<<org.apache.commons.lang.text.StrBuilder,appendFixedWidthPadRight,884>>
+
+
+--- org.apache.commons.lang.NumberUtilsTest::testLang457
+java.lang.StringIndexOutOfBoundsException: String index out of range: 0
+	at java.lang.String.charAt(String.java:658)
+	at org.apache.commons.lang.NumberUtils.createNumber(NumberUtils.java:193)
+	at org.apache.commons.lang.NumberUtilsTest.testLang457(NumberUtilsTest.java:528)
+MUTATIONID:<<org.apache.commons.lang.NumberUtils,createNumber,142>>
+
+
+--- org.apache.commons.lang.math.NumberUtilsTest::testLang300
+java.lang.NumberFormatException: 1l is not a valid number.
+	at org.apache.commons.lang.math.NumberUtils.createNumber(NumberUtils.java:464)
+	at org.apache.commons.lang.math.NumberUtilsTest.testLang300(NumberUtilsTest.java:1371)
+MUTATIONID:<<org.apache.commons.lang.math.NumberUtils,createNumber,454>>
+
+
+--- org.apache.commons.lang3.LocaleUtilsTest::testLang865
+java.lang.IllegalArgumentException: Invalid locale format: _GB
+	at org.apache.commons.lang3.LocaleUtils.toLocale(LocaleUtils.java:99)
+	at org.apache.commons.lang3.LocaleUtilsTest.assertValidToLocale(LocaleUtilsTest.java:119)
+	at org.apache.commons.lang3.LocaleUtilsTest.testLang865(LocaleUtilsTest.java:505)
+MUTATIONID:<<org.apache.commons.lang3.LocaleUtils,toLocale,97>>
+
+
+--- org.apache.commons.lang.WordUtilsTest::testAbbreviate
+java.lang.StringIndexOutOfBoundsException: String index out of range: 15
+	at java.lang.String.substring(String.java:1907)
+	at org.apache.commons.lang.WordUtils.abbreviate(WordUtils.java:629)
+	at org.apache.commons.lang.WordUtilsTest.testAbbreviate(WordUtilsTest.java:390)
+MUTATIONID:<<org.apache.commons.lang.WordUtils,abbreviate,616>>
+
+
+--- org.apache.commons.lang3.math.NumberUtilsTest::testCreateNumber
+java.lang.StringIndexOutOfBoundsException: String index out of range: 4
+	at java.lang.String.substring(String.java:1907)
+	at org.apache.commons.lang3.math.NumberUtils.createNumber(NumberUtils.java:489)
+	at org.apache.commons.lang3.math.NumberUtilsTest.checkCreateNumber(NumberUtilsTest.java:1146)
+	at org.apache.commons.lang3.math.NumberUtilsTest.testCreateNumber(NumberUtilsTest.java:216)
+MUTATIONID:<<org.apache.commons.lang3.math.NumberUtils,createNumber,489>>
+
+
+--- org.apache.commons.lang3.ClassUtilsTest::testToClass_object
+java.lang.NullPointerException
+	at org.apache.commons.lang3.ClassUtils.toClass(ClassUtils.java:910)
+	at org.apache.commons.lang3.ClassUtilsTest.testToClass_object(ClassUtilsTest.java:910)
+MUTATIONID:<<org.apache.commons.lang3.ClassUtils,toClass,910>>
+
+
+--- org.apache.commons.lang.text.ExtendedMessageFormatTest::testEscapedQuote_LANG_477
+java.lang.OutOfMemoryError: Java heap space
+	at java.util.Arrays.copyOf(Arrays.java:2367)
+	at java.lang.AbstractStringBuilder.expandCapacity(AbstractStringBuilder.java:130)
+	at java.lang.AbstractStringBuilder.ensureCapacityInternal(AbstractStringBuilder.java:114)
+	at java.lang.AbstractStringBuilder.append(AbstractStringBuilder.java:587)
+	at java.lang.StringBuffer.append(StringBuffer.java:332)
+	at org.apache.commons.lang.text.ExtendedMessageFormat.appendQuotedString(ExtendedMessageFormat.java:422)
+	at org.apache.commons.lang.text.ExtendedMessageFormat.applyPattern(ExtendedMessageFormat.java:158)
+	at org.apache.commons.lang.text.ExtendedMessageFormat.<init>(ExtendedMessageFormat.java:127)
+	at org.apache.commons.lang.text.ExtendedMessageFormat.<init>(ExtendedMessageFormat.java:112)
+	at org.apache.commons.lang.text.ExtendedMessageFormatTest.testEscapedQuote_LANG_477(ExtendedMessageFormatTest.java:100)
+MUTATIONID:<<org.apache.commons.lang.text.ExtendedMessageFormat,appendQuotedString,422>>
+
+
+--- org.apache.commons.lang.text.StrBuilderTest::testLang412Left
+java.lang.NullPointerException
+	at org.apache.commons.lang.text.StrBuilder.appendFixedWidthPadLeft(StrBuilder.java:1186)
+	at org.apache.commons.lang.text.StrBuilderTest.testLang412Left(StrBuilderTest.java:1761)
+MUTATIONID:<<org.apache.commons.lang.text.StrBuilder,appendFixedWidthPadLeft,1186>>
+
+
+--- org.apache.commons.lang3.ArrayUtilsAddTest::testJira567
+java.lang.ArrayStoreException
+	at java.lang.System.arraycopy(Native Method)
+	at org.apache.commons.lang3.ArrayUtils.addAll(ArrayUtils.java:2962)
+	at org.apache.commons.lang3.ArrayUtilsAddTest.testJira567(ArrayUtilsAddTest.java:40)
+MUTATIONID:<<org.apache.commons.lang3.ArrayUtils,addAll,2962>>
+
