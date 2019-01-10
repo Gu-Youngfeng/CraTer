@@ -193,7 +193,7 @@ public class RepsUtilier {
 	/***
 	 * <p>To get the simple class name from qualified class name. </p>
 	 * <p>E.g., sklse.yongfeng.analysis.RepsUtilier &gt; RepsUtilier</p>
-	 * @param qualifiedName qulified class name
+	 * @param qualifiedName qualified class name
 	 * @return simple class name
 	 */
 	public static String getSimpleClassName(String qualifiedName){

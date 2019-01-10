@@ -1,22 +1,29 @@
 # CraTer
 
-[CraTer](https://github.com/Gu-Youngfeng/CraTer) is an open-source Java tool which is the prototype in paper _Does the Fault Reside in a Stack Trace?_. It first extracts features from the crash datasets, then uses these features to train a predictive model. Once a new crash is submitted, we can use this built model to predict the fault location(i.e., InTrace or OutTrace) of the crash.  
+[CraTer](https://github.com/Gu-Youngfeng/CraTer) is a static program analysis tool aims to extract features from buggy **source code** and **stack trace** when a Java program crashed.
+CraTer is also the prototype in paper [Does the Fault Reside in a Stack Trace?](2019_JSS_Does the fault reside in a stack trace.pdf). 
+It first extracts features from the crash datasets, then uses these features to train a model to predict whether the crashing fault reside in the corresponding stack trace or not.
 
 ## 1. Environment
 
-This project is developed in Java 8.0. The external library we used is **WEKA**, whose jar can be downloaded in the Maven repository [Weka Stable](http://mvnrepository.com/artifact/nz.ac.waikato.cms.weka/weka-stable). Another library is **SPOON**, whose jar can be downloaded in the Maven repository [Spoon Core](http://mvnrepository.com/artifact/fr.inria.gforge.spoon/spoon-core).
+This project is developed on Java 8.0. 
+The external libraries we used are **WEKA** and **SPOON**, which can be downloaded in the Maven repository [Weka Stable](http://mvnrepository.com/artifact/nz.ac.waikato.cms.weka/weka-stable) and [Spoon Core](http://mvnrepository.com/artifact/fr.inria.gforge.spoon/spoon-core).
 
 ## 2. Construction
 
-Currently, we have only four packages at present, i.e., `sklse.yongfeng.analysis`, which conducts static analysis on method, class, and project, `sklse.yongfeng.data`, which does some data preprocessing work, `sklse.yongfeng.experiments`, which contains the whole experiments processes, and `sklse.yongfeng.launcher`, which provide the main entry of the project.
+Currently, we have only five packages at present, i.e., `sklse.yongfeng.analysis`, which conducts static analysis on method, class, and project, `sklse.yongfeng.data`, which does some data preprocessing work, `sklse.yongfeng.experiments`, which contains the whole experiments processes, and `sklse.yongfeng.launcher`, which provide the main entry of the project.
 
-`sklse.yongfeng.analysis` packages includes,
+`sklse.yongfeng.analysis` package includes,
 
-- **RepsUtilier.java** splits the single crash from stack traces file.
+- **Analysis.java** analyzes the 3,500 mutated crash instances from 7 real-world projects.
+- **RepsUtilier.java** splits the single crash from stack traces file and analyzes the features from the stack trace.
 - **CrashNode** saves detailed information of each crash.
-- **MEDAnalyzer.java** analyzes the features of given method. 
-- **CLSAnalyzer.java** analyzes the features of given class.
-- **SRCAnalyzer.java** analyzes the features of given project.
+- **MEDAnalyzer.java** analyzes the method-level features. 
+- **CLSAnalyzer.java** analyzes the class-level features.
+- **SRCAnalyzer.java** analyzes the project-level features.
+- **FeatureList.java** describes the detail information of total 89 features we need to extract.
+
+`sklse.yongfeng.analysis.realcrash` package conducts the experiments on real-world crashes, implementing the similar functions with the package `sklse.yongfeng.analysis`.
 
 `sklse.yongfeng.data` package includes,
 
