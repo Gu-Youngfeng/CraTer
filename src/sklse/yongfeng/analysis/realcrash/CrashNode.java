@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /***
- * <p><b>CrashBode</b> is a crash node class, which save the basic information from single crash.
+ * <p><b>CrashNode</b> is a crash node class, which save the basic information from single crash.
  * This information includes {@link#exceptionType}, {@link#loc}, {@link#topClassName}, {@link#topMethodName}, {@link#topMethodLine}, 
  *  {@link#bottomClassName}, {@link#bottomMethodName}, {@link#bottomMethodLine}.
  * </p>

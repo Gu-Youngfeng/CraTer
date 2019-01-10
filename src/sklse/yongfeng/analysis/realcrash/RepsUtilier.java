@@ -6,6 +6,12 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
+/***
+ * <p>This class <b>RepUtilier</b> provides the functions of extracting crash information({@link#getSingleCrash}) 
+ * and related features({@link#getFeatures}).</p>
+ * @author yongfeng
+ *
+ */
 public class RepsUtilier {
 	
 	public static void main(String[] args) throws Exception {
@@ -104,9 +110,16 @@ public class RepsUtilier {
 	}
 	
 	/**
-	 * <p>to return the list of single crash</p>
-	 * @param path
-	 * @return
+	 * <p>To return the crash node list in path, each of which contains all stack traces in the corresponding crash. 
+	 * <br>Here is the example of a single crash: </p>
+	 * 
+	 * <pre> --- org.apache.commons.lang3.math.NumberUtilsTest::testCreateNumber
+     * java.lang.NumberFormatException: 2. is not a valid number.
+	 *     at org.apache.commons.lang3.math.NumberUtils.createNumber(NumberUtils.java:546)
+	 *     at org.apache.commons.lang3.math.NumberUtilsTest.testCreateNumber(NumberUtilsTest.java:213)
+     * MUTATIONID: &lt;&lt; org.apache.commons.lang3.math.NumberUtils,createNumber,491 &gt;&gt;</pre>
+	 * @param path path of project.txt
+	 * @return list of crash node
 	 * @throws Exception 
 	 */
 	public static List<CrashNode> getSingleCrash(String path) throws Exception{
@@ -174,6 +187,12 @@ public class RepsUtilier {
 			
 	}
 	
+	/***
+	 * <p>To get the simple class name from qualified class name. </p>
+	 * <p>E.g., sklse.yongfeng.analysis.RepsUtilier &gt; RepsUtilier</p>
+	 * @param qualifiedName qulified class name
+	 * @return simple class name
+	 */
 	public static String getSimpleClassName(String qualifiedName){
 		String simpleName = "";
 		

@@ -6,13 +6,15 @@ package sklse.yongfeng.analysis;
  *
  */
 public class Analysis {
+	/** Total number of mutated projects */
+	public static final int PRO_SIZE = 7;
 
 	public static void main(String[] args) {
 		
-		System.out.println("Static Analysis on 7 Projects.");
+		System.out.println("Static Analysis on {" + PRO_SIZE + "} Projects.");
 		System.out.println("-------------------------------------------------");	
 		
-		for(int i=1; i<=7; i++){
+		for(int i=1; i<=PRO_SIZE; i++){
 			projectAnalyzer(i);
 		}	
 		
