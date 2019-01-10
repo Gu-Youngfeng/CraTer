@@ -6,13 +6,19 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
+/***
+ * <p>This class <b>RepUtilier</b> provides the functions of extracting crash information({@link#getSingleCrash}) 
+ * and related features({@link#getFeatures}).</p>
+ * @author yongfeng
+ *
+ */
 public class RepsUtilier {
 	
 	public static void main(String[] args) throws Exception {
 		List<CrashNode> lsCrash = getSingleCrash("resources/crashrep/lang.txt");
 		for(CrashNode crash: lsCrash){
 			crash.showBasicInfo();
-			System.out.println(crash.InTrace);
+//			System.out.println(crash.InTrace);
 //			if (crash.InTrace > 1 && crash.InTrace < crash.getLOC()){
 //				crash.showBasicInfo();
 //				System.out.println(crash.InTrace);
@@ -106,9 +112,16 @@ public class RepsUtilier {
 	}
 	
 	/**
-	 * <p>to return the list of single crash</p>
-	 * @param path
-	 * @return
+	 * <p>To return the crash node list in path, each of which contains all stack traces in the corresponding crash. 
+	 * <br>Here is the example of a single crash: </p>
+	 * 
+	 * <pre> --- org.apache.commons.lang3.math.NumberUtilsTest::testCreateNumber
+     * java.lang.NumberFormatException: 2. is not a valid number.
+	 *     at org.apache.commons.lang3.math.NumberUtils.createNumber(NumberUtils.java:546)
+	 *     at org.apache.commons.lang3.math.NumberUtilsTest.testCreateNumber(NumberUtilsTest.java:213)
+     * MUTATIONID: &lt;&lt; org.apache.commons.lang3.math.NumberUtils,createNumber,491 &gt;&gt;</pre>
+	 * @param path path of project.txt
+	 * @return list of crash node
 	 * @throws Exception 
 	 */
 	public static List<CrashNode> getSingleCrash(String path) throws Exception{
@@ -117,7 +130,7 @@ public class RepsUtilier {
 		// split the xx_mutants.txt in "crashrep"
 		File file = new File(path);
 		if(!file.exists()){
-			System.out.println("[ERROR]: No such file! " + path);
+			System.out.println("[ERROR]: No such file! " + path); 
 			return null;
 		}
 		
@@ -125,19 +138,20 @@ public class RepsUtilier {
 		BufferedReader br = new BufferedReader(fr);
 		
 		String str = "";
-		List<String> singleCrash = new ArrayList<String>();
+		List<String> singleCrash = new ArrayList<String>(); // each single crash is a string list 
 		while((str=br.readLine())!=null){
 			
 			if(str.contains("(Unknown Source)")){ // we cannot solve the UNKONWN SOURCE in stack trace
 				continue;
 			}
 			
-			if(str.startsWith("MUTATIONID:<<")){ // end of single crash
+			if(str.startsWith("MUTATIONID:<<")){ // boundary of crash node
 				singleCrash.add(str);
 				CrashNode crash = new CrashNode(singleCrash);
 				lsCrash.add(crash);
+//				System.out.println(singleCrash); // print each crash's stack trace
 				singleCrash.clear();
-			}else if(!str.trim().equals("") && !str.equals("BUG1")){
+			}else if(!str.trim().equals("") && !str.equals("BUG1")){ // content of crash node 
 				singleCrash.add(str);
 			}
 		}
@@ -149,7 +163,7 @@ public class RepsUtilier {
 	}
 	
 	/**<p>Extract ST01 - ST09 from the stack trace. </p>
-	 * @param crash
+	 * @param crash single crash
 	 * */
 	public static void showSTFeatures(CrashNode crash){
 		/**ST01: Type of the exception in the crash*/
@@ -176,6 +190,12 @@ public class RepsUtilier {
 			
 	}
 	
+	/***
+	 * <p>To get the simple class name from qualified class name. </p>
+	 * <p>E.g., sklse.yongfeng.analysis.RepsUtilier &gt; RepsUtilier</p>
+	 * @param qualifiedName qulified class name
+	 * @return simple class name
+	 */
 	public static String getSimpleClassName(String qualifiedName){
 		String simpleName = "";
 		

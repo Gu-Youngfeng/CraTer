@@ -16,9 +16,11 @@ public class StatisticalProject {
 
 		System.out.println("-----  Distribution Information in dataset  -----\n");
 		
-		String[] path = {"files/codec500.arff",
-				"files/ormlite500.arff", "files/jsqlparser500.arff", "files/collections500.arff",
-				"files/io500.arff", "files/jsoup500.arff", "files/mango500.arff"};
+		String[] path = {"files/data/codec.arff",
+				"files/data/ormlite.arff", "files/data/jsqlparser.arff", "files/data/collections.arff",
+				"files/data/io.arff", "files/data/jsoup.arff", "files/data/mango.arff"
+				,"files/data/lang.arff" // Lang project
+				};
 		
 		for(int i=0; i<path.length; i++){
 
@@ -49,6 +51,6 @@ public class StatisticalProject {
 			}
 		}
 		
-		System.out.printf("[ %-30s ] inTrace:%4d, outTrace:%4d.\n", path, intrace, outtrace);
+		System.out.printf("%-30s | inTrace: %-5d | outTrace: %-5d |\n", path, intrace, outtrace);
 	}
 }

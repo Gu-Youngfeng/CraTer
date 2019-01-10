@@ -24,5 +24,7 @@
 	<classpathentry kind="lib" path="resources/projs_libs/slf4j-api-1.7.2.jar"/>
 	<classpathentry kind="lib" path="resources/projs_libs/jsap-2.1.jar"/>
 	<classpathentry kind="lib" path="resources/projs_libs/org.eclipse.jdt.core-3.13.50.jar"/>
+	<classpathentry kind="lib" path="libs/commons-lang3-3.0.jar"/>
+	<classpathentry kind="lib" path="libs/commons-lang-2.6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
